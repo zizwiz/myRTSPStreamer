@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="myRTSPStreamer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Username" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IpAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.140</Value>
+    </Setting>
+    <Setting Name="Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">554</Value>
+    </Setting>
+    <Setting Name="StreamPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">live/0/MAIN</Value>
+    </Setting>
+    <Setting Name="SnapshotFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">c:\timelapse</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
