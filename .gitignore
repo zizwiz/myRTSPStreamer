@@ -3,3 +3,6 @@
 ################################################################################
 
 /myRTSPStreamer/bin
+/myRTSPStreamer/obj/Debug
+/myRTSPStreamer/obj/Release
+/myRTSPStreamer/obj
