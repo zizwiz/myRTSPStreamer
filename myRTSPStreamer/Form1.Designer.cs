@@ -54,6 +54,7 @@ namespace myRTSPStreamer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.videoView1 = new LibVLCSharp.WinForms.VideoView();
             this.panelTop = new System.Windows.Forms.Panel();
             this.btnBrowseFolder = new System.Windows.Forms.Button();
@@ -75,6 +76,7 @@ namespace myRTSPStreamer
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerAutoSnapshot = new System.Windows.Forms.Timer(this.components);
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.txtSnapshotNumber = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).BeginInit();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
@@ -94,6 +96,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.txtSnapshotNumber);
             this.panelTop.Controls.Add(this.btnBrowseFolder);
             this.panelTop.Controls.Add(this.txtSnapshotFolder);
             this.panelTop.Controls.Add(this.numInterval);
@@ -289,6 +292,13 @@ namespace myRTSPStreamer
             this.txtLog.Size = new System.Drawing.Size(1250, 120);
             this.txtLog.TabIndex = 0;
             // 
+            // txtSnapshotNumber
+            // 
+            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
+            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
+            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
+            this.txtSnapshotNumber.TabIndex = 17;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
@@ -296,9 +306,11 @@ namespace myRTSPStreamer
             this.Controls.Add(this.videoView1);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.statusStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "RTSP H.265 Viewer";
+            this.Text = "myRTSPStreamer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
@@ -312,6 +324,8 @@ namespace myRTSPStreamer
 
 
         #endregion
+
+        private TextBox txtSnapshotNumber;
     }
 }
 

@@ -20,5 +20,8 @@
     <Setting Name="SnapshotFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">c:\timelapse</Value>
     </Setting>
+    <Setting Name="LastSnapshotDate" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

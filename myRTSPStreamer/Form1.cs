@@ -1,6 +1,7 @@
 ﻿using LibVLCSharp.Shared;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace myRTSPStreamer
@@ -26,14 +27,22 @@ namespace myRTSPStreamer
 
             timerAutoSnapshot.Interval = 60000; // default, will be updated from numInterval
 
-            timerStreamMonitor = new Timer();
-            timerStreamMonitor.Interval = 10000; // check every 10 seconds
-            timerStreamMonitor.Tick += timerStreamMonitor_Tick;
-            timerStreamMonitor.Start();
+            //timerStreamMonitor = new Timer();
+            //timerStreamMonitor.Interval = 10000; // check every 10 seconds
+            //timerStreamMonitor.Tick += timerStreamMonitor_Tick;
+            //timerStreamMonitor.Start();
 
             LoadSettings();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Text += " : v" + Assembly.GetExecutingAssembly().GetName().Version; // put in the version number
+
+            txtSnapshotNumber.Text = "1";
+            Properties.Settings.Default.LastSnapshotDate = DateTime.Now.ToShortDateString();
+
+        }
 
         private void LoadSettings()
         {
@@ -57,6 +66,12 @@ namespace myRTSPStreamer
 
                 UpdateTimerFromUI();
                 lblStatus.Text = "Streaming...";
+
+                //Timer to check if stream is alive, if not restart it.
+                timerStreamMonitor = new Timer();
+                timerStreamMonitor.Interval = 10000; // check every 10 seconds
+                timerStreamMonitor.Tick += timerStreamMonitor_Tick;
+                timerStreamMonitor.Start();
             }
             catch (Exception ex)
             {
@@ -64,47 +79,14 @@ namespace myRTSPStreamer
             }
         }
 
-        /*       private void btnStart_Click(object sender, EventArgs e)
-               {
-                   try
-                   {
-                       string rtspUrl = txtRtspUrl.Text.Trim();
-
-                       if (string.IsNullOrWhiteSpace(rtspUrl))
-                       {
-                           MessageBox.Show("Please enter an RTSP URL.");
-                           return;
-                       }
-
-                       // Replaced line below to remove error: “The total received frame size exceeds the client’s buffer
-                       // size”
-
-                        var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
-
-                       //var media = new Media(_libVLC, rtspUrl, FromType.FromLocation,
-                       //    ":rtp-max-buffer=1000000",
-                       //    ":network-caching=300"
-                       //);
-
-
-                       _mediaPlayer.Play(media);
-
-                       UpdateTimerFromUI();
-                       lblStatus.Text = "Streaming...";
-                   }
-                   catch (Exception ex)
-                   {
-                       lblStatus.Text = "Error starting stream";
-                       MessageBox.Show(ex.Message, "Error");
-                   }
-               }*/
-
+       
         private void btnStop_Click(object sender, EventArgs e)
         {
             try
             {
                 _mediaPlayer.Stop();
                 timerAutoSnapshot.Stop();
+                timerStreamMonitor.Stop();
                 lblStatus.Text = "Stopped";
             }
             catch (Exception ex)
@@ -172,19 +154,38 @@ namespace myRTSPStreamer
                     return;
                 }
 
-                string year = DateTime.Now.Year.ToString();
-                string month = DateTime.Now.Month.ToString("00");
-                string day = DateTime.Now.Day.ToString("00");
+                string year = DateTime.Now.ToString("yyyy");    //DateTime.Now.Year.ToString("yyyy");
+                string month = DateTime.Now.ToString("MMM");
+                string day = DateTime.Now.ToString("dd");
 
                 string folderPath = Path.Combine(basePath, year, month, day);
                 Directory.CreateDirectory(folderPath);
 
                 string timestamp = DateTime.Now.ToString("ddMMyyyy_HHmmss");
-                string filename = $"{timestamp}_{snapshotCounter}.png";
+               
+                //Reset unique number if we are past midnight
+                string today = DateTime.Now.ToShortDateString();
+                
+                if (Properties.Settings.Default.LastSnapshotDate != today)
+                {
+                    // New day → reset counter
+                    txtSnapshotNumber.Text = "1";
+                    Properties.Settings.Default.LastSnapshotDate = today;
+                    Properties.Settings.Default.Save();
+                    Log("New day detected — snapshot counter reset to 1.");
+                }
+
+                if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
+
+                string filename = $"{timestamp}_{snapNum}.png";
                 string fullPath = Path.Combine(folderPath, filename);
 
                 _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
-                snapshotCounter++;
+
+                // Increment for next time
+                snapNum++;
+                txtSnapshotNumber.Text = snapNum.ToString();
+
 
                 // Get file size
                 long fileSize = new FileInfo(fullPath).Length;
@@ -200,8 +201,23 @@ namespace myRTSPStreamer
 
         private void Log(string message)
         {
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string FolderPath;
+            string timestamp = DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss");
             string line = $"{timestamp}  {message}";
+            DateTime myDate = DateTime.Now;
+
+            if (!string.IsNullOrWhiteSpace(txtSnapshotFolder.Text))
+            {
+                FolderPath = Path.Combine(txtSnapshotFolder.Text, myDate.ToString("yyyy"),
+                    myDate.ToString("MMM"), myDate.ToString("dd"));
+            }
+            else
+            {
+                FolderPath = Path.Combine("C:\\timelapse", myDate.ToString("yyyy"),
+                    myDate.ToString("MMM"), myDate.ToString("dd"));
+            }
+
+            Directory.CreateDirectory(FolderPath); //create if not already there
 
             // Write to on-screen log
             txtLog.AppendText(line + Environment.NewLine);
@@ -211,7 +227,7 @@ namespace myRTSPStreamer
             {
                 if (!string.IsNullOrWhiteSpace(txtSnapshotFolder.Text))
                 {
-                    string logPath = Path.Combine(txtSnapshotFolder.Text, "log.txt");
+                    string logPath = Path.Combine(FolderPath, "log.txt");
                     File.AppendAllText(logPath, line + Environment.NewLine);
                 }
             }
@@ -310,6 +326,7 @@ namespace myRTSPStreamer
             SaveSettings();
         }
 
+        // If we think stream is not running lets try restart it
         private void timerStreamMonitor_Tick(object sender, EventArgs e)
         {
             if (_mediaPlayer == null)
@@ -353,5 +370,7 @@ namespace myRTSPStreamer
                 Log("Restart failed: " + ex.Message);
             }
         }
+
+       
     }
 }

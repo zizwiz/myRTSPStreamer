@@ -94,5 +94,17 @@ namespace myRTSPStreamer.Properties {
                 this["SnapshotFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastSnapshotDate {
+            get {
+                return ((string)(this["LastSnapshotDate"]));
+            }
+            set {
+                this["LastSnapshotDate"] = value;
+            }
+        }
     }
 }
