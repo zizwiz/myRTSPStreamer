@@ -10,6 +10,9 @@ namespace myRTSPStreamer
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
         private int snapshotCounter = 1;
+        private int restartAttempts = 0;
+        private const int MaxRestartAttempts = 5;
+        private Timer timerStreamMonitor;
 
         public Form1()
         {
@@ -23,18 +26,23 @@ namespace myRTSPStreamer
 
             timerAutoSnapshot.Interval = 60000; // default, will be updated from numInterval
 
+            timerStreamMonitor = new Timer();
+            timerStreamMonitor.Interval = 10000; // check every 10 seconds
+            timerStreamMonitor.Tick += timerStreamMonitor_Tick;
+            timerStreamMonitor.Start();
+
             LoadSettings();
         }
 
 
         private void LoadSettings()
         {
-            txtUsername.Text = myRTSPStreamer.Properties.Settings.Default.Username;
-            txtPassword.Text = myRTSPStreamer.Properties.Settings.Default.Password;
-            txtIpAddress.Text = myRTSPStreamer.Properties.Settings.Default.IpAddress;
-            txtPort.Text = myRTSPStreamer.Properties.Settings.Default.Port;
-            txtStreamPath.Text = myRTSPStreamer.Properties.Settings.Default.StreamPath;
-            txtSnapshotFolder.Text = myRTSPStreamer.Properties.Settings.Default.SnapshotFolder;
+            txtUsername.Text = Properties.Settings.Default.Username;
+            txtPassword.Text = Properties.Settings.Default.Password;
+            txtIpAddress.Text = Properties.Settings.Default.IpAddress;
+            txtPort.Text = Properties.Settings.Default.Port;
+            txtStreamPath.Text = Properties.Settings.Default.StreamPath;
+            txtSnapshotFolder.Text = Properties.Settings.Default.SnapshotFolder;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -157,7 +165,7 @@ namespace myRTSPStreamer
                     return;
                 }
 
-                string basePath = txtSnapshotFolder.Text.Trim();
+               string basePath = txtSnapshotFolder.Text.Trim();
                 if (string.IsNullOrWhiteSpace(basePath))
                 {
                     MessageBox.Show("Please select a snapshot folder.");
@@ -287,20 +295,63 @@ namespace myRTSPStreamer
 
         private void SaveSettings()
         {
-            myRTSPStreamer.Properties.Settings.Default.Username = txtUsername.Text;
-            myRTSPStreamer.Properties.Settings.Default.Password = txtPassword.Text;
-            myRTSPStreamer.Properties.Settings.Default.IpAddress = txtIpAddress.Text;
-            myRTSPStreamer.Properties.Settings.Default.Port = txtPort.Text;
-            myRTSPStreamer.Properties.Settings.Default.StreamPath = txtStreamPath.Text;
-            myRTSPStreamer.Properties.Settings.Default.SnapshotFolder = txtSnapshotFolder.Text;
+            Properties.Settings.Default.Username = txtUsername.Text;
+            Properties.Settings.Default.Password = txtPassword.Text;
+            Properties.Settings.Default.IpAddress = txtIpAddress.Text;
+            Properties.Settings.Default.Port = txtPort.Text;
+            Properties.Settings.Default.StreamPath = txtStreamPath.Text;
+            Properties.Settings.Default.SnapshotFolder = txtSnapshotFolder.Text;
 
-            myRTSPStreamer.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
+        }
 
+        private void timerStreamMonitor_Tick(object sender, EventArgs e)
+        {
+            if (_mediaPlayer == null)
+                return;
+
+            // If VLC thinks it's playing, nothing to do
+            if (_mediaPlayer.IsPlaying)
+            {
+                restartAttempts = 0; // reset counter
+                return;
+            }
+
+            // If not playing, attempt restart
+            restartAttempts++;
+
+            Log($"Stream appears stopped. Attempting restart {restartAttempts}/{MaxRestartAttempts}...");
+
+            if (restartAttempts <= MaxRestartAttempts)
+            {
+                TryRestartStream();
+            }
+            else
+            {
+                Log("Stream could not be restarted. Stopping snapshots.");
+                timerAutoSnapshot.Stop();
+            }
+        }
+
+        private void TryRestartStream()
+        {
+            try
+            {
+                string rtspUrl = BuildRtspUrl();
+                Log("Restarting stream: " + rtspUrl);
+
+                var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
+                _mediaPlayer.Play(media);
+            }
+            catch (Exception ex)
+            {
+                Log("Restart failed: " + ex.Message);
+            }
         }
     }
 }
