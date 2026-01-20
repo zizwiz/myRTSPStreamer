@@ -9,8 +9,6 @@ namespace myRTSPStreamer
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
-        private LibVLCSharp.WinForms.VideoView videoView1;
         private Panel panelTop;
         private TextBox txtRtspUrl;
         private Button btnStart;
@@ -20,10 +18,7 @@ namespace myRTSPStreamer
         private NumericUpDown numInterval;
         private TextBox txtSnapshotFolder;
         private Button btnBrowseFolder;
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel lblStatus;
         private Timer timerAutoSnapshot;
-        private TextBox txtLog;
         private Button btnClearLog;
         private Button btnExit;
         private TextBox txtUsername;
@@ -55,7 +50,6 @@ namespace myRTSPStreamer
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.videoView1 = new LibVLCSharp.WinForms.VideoView();
             this.panelTop = new System.Windows.Forms.Panel();
             this.btnBrowseFolder = new System.Windows.Forms.Button();
             this.txtSnapshotFolder = new System.Windows.Forms.TextBox();
@@ -72,27 +66,17 @@ namespace myRTSPStreamer
             this.txtIpAddress = new System.Windows.Forms.TextBox();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtStreamPath = new System.Windows.Forms.TextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerAutoSnapshot = new System.Windows.Forms.Timer(this.components);
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.txtSnapshotNumber = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.videoView1)).BeginInit();
+            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.videoView1 = new LibVLCSharp.WinForms.VideoView();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.videoView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // videoView1
-            // 
-            this.videoView1.BackColor = System.Drawing.Color.Black;
-            this.videoView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.videoView1.Location = new System.Drawing.Point(0, 90);
-            this.videoView1.MediaPlayer = null;
-            this.videoView1.Name = "videoView1";
-            this.videoView1.Size = new System.Drawing.Size(1250, 490);
-            this.videoView1.TabIndex = 0;
-            this.videoView1.Text = "videoView1";
             // 
             // panelTop
             // 
@@ -258,6 +242,23 @@ namespace myRTSPStreamer
             this.txtStreamPath.TabIndex = 14;
             this.txtStreamPath.Text = "live/0/MAIN";
             // 
+            // timerAutoSnapshot
+            // 
+            this.timerAutoSnapshot.Tick += new System.EventHandler(this.timerAutoSnapshot_Tick);
+            // 
+            // txtSnapshotNumber
+            // 
+            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
+            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
+            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
+            this.txtSnapshotNumber.TabIndex = 17;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(60, 25);
+            this.lblStatus.Text = "Ready";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -268,15 +269,16 @@ namespace myRTSPStreamer
             this.statusStrip1.Size = new System.Drawing.Size(1250, 32);
             this.statusStrip1.TabIndex = 2;
             // 
-            // lblStatus
+            // videoView1
             // 
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(60, 25);
-            this.lblStatus.Text = "Ready";
-            // 
-            // timerAutoSnapshot
-            // 
-            this.timerAutoSnapshot.Tick += new System.EventHandler(this.timerAutoSnapshot_Tick);
+            this.videoView1.BackColor = System.Drawing.Color.Black;
+            this.videoView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoView1.Location = new System.Drawing.Point(30, 97);
+            this.videoView1.MediaPlayer = null;
+            this.videoView1.Name = "videoView1";
+            this.videoView1.Size = new System.Drawing.Size(389, 258);
+            this.videoView1.TabIndex = 0;
+            this.videoView1.Text = "videoView1";
             // 
             // txtLog
             // 
@@ -292,13 +294,6 @@ namespace myRTSPStreamer
             this.txtLog.Size = new System.Drawing.Size(1250, 120);
             this.txtLog.TabIndex = 0;
             // 
-            // txtSnapshotNumber
-            // 
-            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
-            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
-            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
-            this.txtSnapshotNumber.TabIndex = 17;
-            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
@@ -311,12 +306,12 @@ namespace myRTSPStreamer
             this.Text = "myRTSPStreamer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,6 +321,10 @@ namespace myRTSPStreamer
         #endregion
 
         private TextBox txtSnapshotNumber;
+        private ToolStripStatusLabel lblStatus;
+        private StatusStrip statusStrip1;
+        private VideoView videoView1;
+        private TextBox txtLog;
     }
 }
 

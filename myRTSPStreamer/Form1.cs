@@ -10,8 +10,7 @@ namespace myRTSPStreamer
     {
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
-        private int snapshotCounter = 1;
-        private int restartAttempts = 0;
+       private int restartAttempts = 0;
         private const int MaxRestartAttempts = 5;
         private Timer timerStreamMonitor;
 
@@ -26,11 +25,6 @@ namespace myRTSPStreamer
             videoView1.MediaPlayer = _mediaPlayer;
 
             timerAutoSnapshot.Interval = 60000; // default, will be updated from numInterval
-
-            //timerStreamMonitor = new Timer();
-            //timerStreamMonitor.Interval = 10000; // check every 10 seconds
-            //timerStreamMonitor.Tick += timerStreamMonitor_Tick;
-            //timerStreamMonitor.Start();
 
             LoadSettings();
         }
@@ -179,7 +173,7 @@ namespace myRTSPStreamer
 
                 if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
 
-                string filename = $"{timestamp}_{snapNum}.png";
+                string filename = $"{timestamp}_{snapNum}.jpg";
                 string fullPath = Path.Combine(folderPath, filename);
 
                 _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
@@ -239,17 +233,7 @@ namespace myRTSPStreamer
             }
         }
 
-
-        // Not used
-        //protected override void OnFormClosing(FormClosingEventArgs e)
-        //{
-        //    timerAutoSnapshot.Stop();
-        //    _mediaPlayer?.Stop();
-        //    _mediaPlayer?.Dispose();
-        //    _libVLC?.Dispose();
-        //    base.OnFormClosing(e);
-        //}
-
+        
         private void btnClearLog_Click(object sender, EventArgs e)
         {
             ClearLog();
@@ -257,27 +241,8 @@ namespace myRTSPStreamer
 
         private void ClearLog()
         {
-
             txtLog.Clear();
             Log("Log panel cleared.");
-
-            // removed as we want to keep file
-            //try
-            //{
-            //    if (!string.IsNullOrWhiteSpace(txtSnapshotFolder.Text))
-            //    {
-            //        string logPath = Path.Combine(txtSnapshotFolder.Text, "log.txt");
-            //        if (File.Exists(logPath))
-            //        {
-            //            File.WriteAllText(logPath, string.Empty);
-            //            Log("log.txt cleared.");
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Log("Error clearing log file: " + ex.Message);
-            //}
         }
 
         private void btnExit_Click(object sender, EventArgs e)
