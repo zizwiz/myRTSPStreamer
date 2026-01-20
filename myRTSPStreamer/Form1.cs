@@ -79,7 +79,7 @@ namespace myRTSPStreamer
             }
         }
 
-       
+
         private void btnStop_Click(object sender, EventArgs e)
         {
             try
@@ -147,7 +147,7 @@ namespace myRTSPStreamer
                     return;
                 }
 
-               string basePath = txtSnapshotFolder.Text.Trim();
+                string basePath = txtSnapshotFolder.Text.Trim();
                 if (string.IsNullOrWhiteSpace(basePath))
                 {
                     MessageBox.Show("Please select a snapshot folder.");
@@ -162,10 +162,10 @@ namespace myRTSPStreamer
                 Directory.CreateDirectory(folderPath);
 
                 string timestamp = DateTime.Now.ToString("ddMMyyyy_HHmmss");
-               
-                //Reset unique number if we are past midnight
+
+                //Reset unique number if we are past midnight and clear the logfile.
                 string today = DateTime.Now.ToShortDateString();
-                
+
                 if (Properties.Settings.Default.LastSnapshotDate != today)
                 {
                     // New day → reset counter
@@ -173,6 +173,8 @@ namespace myRTSPStreamer
                     Properties.Settings.Default.LastSnapshotDate = today;
                     Properties.Settings.Default.Save();
                     Log("New day detected — snapshot counter reset to 1.");
+
+                    ClearLog(); // clear log file
                 }
 
                 if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
@@ -250,6 +252,12 @@ namespace myRTSPStreamer
 
         private void btnClearLog_Click(object sender, EventArgs e)
         {
+            ClearLog();
+        }
+
+        private void ClearLog()
+        {
+
             txtLog.Clear();
             Log("Log panel cleared.");
 
@@ -371,6 +379,6 @@ namespace myRTSPStreamer
             }
         }
 
-       
+
     }
 }
