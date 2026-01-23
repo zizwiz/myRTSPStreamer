@@ -10,7 +10,6 @@ namespace myRTSPStreamer
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private Panel panelTop;
-        private TextBox txtRtspUrl;
         private Button btnStart;
         private Button btnStop;
         private Button btnSnapshot;
@@ -59,7 +58,6 @@ namespace myRTSPStreamer
             this.btnSnapshot = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
-            this.txtRtspUrl = new System.Windows.Forms.TextBox();
             this.btnClearLog = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.txtUsername = new System.Windows.Forms.TextBox();
@@ -76,6 +74,13 @@ namespace myRTSPStreamer
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -88,6 +93,13 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.label7);
+            this.panelTop.Controls.Add(this.label6);
+            this.panelTop.Controls.Add(this.label5);
+            this.panelTop.Controls.Add(this.label4);
+            this.panelTop.Controls.Add(this.label3);
+            this.panelTop.Controls.Add(this.label2);
+            this.panelTop.Controls.Add(this.label1);
             this.panelTop.Controls.Add(this.txtSnapshotNumber);
             this.panelTop.Controls.Add(this.btnBrowseFolder);
             this.panelTop.Controls.Add(this.txtSnapshotFolder);
@@ -96,7 +108,6 @@ namespace myRTSPStreamer
             this.panelTop.Controls.Add(this.btnSnapshot);
             this.panelTop.Controls.Add(this.btnStop);
             this.panelTop.Controls.Add(this.btnStart);
-            this.panelTop.Controls.Add(this.txtRtspUrl);
             this.panelTop.Controls.Add(this.btnClearLog);
             this.panelTop.Controls.Add(this.btnExit);
             this.panelTop.Controls.Add(this.txtUsername);
@@ -107,21 +118,21 @@ namespace myRTSPStreamer
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1244, 84);
+            this.panelTop.Size = new System.Drawing.Size(1244, 94);
             this.panelTop.TabIndex = 1;
             // 
             // txtSnapshotNumber
             // 
-            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
+            this.txtSnapshotNumber.Location = new System.Drawing.Point(649, 63);
             this.txtSnapshotNumber.Name = "txtSnapshotNumber";
             this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
             this.txtSnapshotNumber.TabIndex = 17;
             // 
             // btnBrowseFolder
             // 
-            this.btnBrowseFolder.Location = new System.Drawing.Point(578, 64);
+            this.btnBrowseFolder.Location = new System.Drawing.Point(410, 66);
             this.btnBrowseFolder.Name = "btnBrowseFolder";
-            this.btnBrowseFolder.Size = new System.Drawing.Size(32, 23);
+            this.btnBrowseFolder.Size = new System.Drawing.Size(32, 25);
             this.btnBrowseFolder.TabIndex = 0;
             this.btnBrowseFolder.Text = "...";
             this.btnBrowseFolder.Click += new System.EventHandler(this.btnBrowseFolder_Click);
@@ -130,13 +141,13 @@ namespace myRTSPStreamer
             // 
             this.txtSnapshotFolder.Location = new System.Drawing.Point(12, 65);
             this.txtSnapshotFolder.Name = "txtSnapshotFolder";
-            this.txtSnapshotFolder.Size = new System.Drawing.Size(560, 26);
+            this.txtSnapshotFolder.Size = new System.Drawing.Size(392, 26);
             this.txtSnapshotFolder.TabIndex = 1;
             this.txtSnapshotFolder.Text = "C:\\snapshots";
             // 
             // numInterval
             // 
-            this.numInterval.Location = new System.Drawing.Point(130, 39);
+            this.numInterval.Location = new System.Drawing.Point(207, 39);
             this.numInterval.Maximum = new decimal(new int[] {
             3600,
             0,
@@ -160,23 +171,23 @@ namespace myRTSPStreamer
             // 
             this.chkAutoSnapshot.Location = new System.Drawing.Point(12, 39);
             this.chkAutoSnapshot.Name = "chkAutoSnapshot";
-            this.chkAutoSnapshot.Size = new System.Drawing.Size(104, 24);
+            this.chkAutoSnapshot.Size = new System.Drawing.Size(189, 26);
             this.chkAutoSnapshot.TabIndex = 3;
-            this.chkAutoSnapshot.Text = "Auto snapshot";
+            this.chkAutoSnapshot.Text = "Auto snapshot every";
             this.chkAutoSnapshot.CheckedChanged += new System.EventHandler(this.chkAutoSnapshot_CheckedChanged);
             // 
             // btnSnapshot
             // 
-            this.btnSnapshot.Location = new System.Drawing.Point(620, 39);
+            this.btnSnapshot.Location = new System.Drawing.Point(947, 56);
             this.btnSnapshot.Name = "btnSnapshot";
-            this.btnSnapshot.Size = new System.Drawing.Size(126, 25);
+            this.btnSnapshot.Size = new System.Drawing.Size(126, 31);
             this.btnSnapshot.TabIndex = 4;
             this.btnSnapshot.Text = "Snapshot now";
             this.btnSnapshot.Click += new System.EventHandler(this.btnSnapshot_Click);
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(686, 8);
+            this.btnStop.Location = new System.Drawing.Point(1136, 7);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(60, 25);
             this.btnStop.TabIndex = 5;
@@ -185,42 +196,34 @@ namespace myRTSPStreamer
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(620, 8);
+            this.btnStart.Location = new System.Drawing.Point(1070, 7);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(60, 25);
             this.btnStart.TabIndex = 6;
             this.btnStart.Text = "Start";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // txtRtspUrl
-            // 
-            this.txtRtspUrl.Location = new System.Drawing.Point(12, 10);
-            this.txtRtspUrl.Name = "txtRtspUrl";
-            this.txtRtspUrl.Size = new System.Drawing.Size(600, 26);
-            this.txtRtspUrl.TabIndex = 7;
-            this.txtRtspUrl.Text = "rtsp://admin:@192.168.1.140:554/live/0/MAIN";
-            // 
             // btnClearLog
             // 
-            this.btnClearLog.Location = new System.Drawing.Point(620, 65);
+            this.btnClearLog.Location = new System.Drawing.Point(1079, 56);
             this.btnClearLog.Name = "btnClearLog";
-            this.btnClearLog.Size = new System.Drawing.Size(90, 23);
+            this.btnClearLog.Size = new System.Drawing.Size(90, 31);
             this.btnClearLog.TabIndex = 8;
             this.btnClearLog.Text = "Clear Log";
             this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(716, 65);
+            this.btnExit.Location = new System.Drawing.Point(1175, 56);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(60, 23);
+            this.btnExit.Size = new System.Drawing.Size(60, 33);
             this.btnExit.TabIndex = 9;
             this.btnExit.Text = "Exit";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(838, 12);
+            this.txtUsername.Location = new System.Drawing.Point(101, 6);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(100, 26);
             this.txtUsername.TabIndex = 16;
@@ -228,14 +231,14 @@ namespace myRTSPStreamer
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(838, 38);
+            this.txtPassword.Location = new System.Drawing.Point(304, 6);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(100, 26);
             this.txtPassword.TabIndex = 11;
             // 
             // txtIpAddress
             // 
-            this.txtIpAddress.Location = new System.Drawing.Point(838, 64);
+            this.txtIpAddress.Location = new System.Drawing.Point(543, 6);
             this.txtIpAddress.Name = "txtIpAddress";
             this.txtIpAddress.Size = new System.Drawing.Size(120, 26);
             this.txtIpAddress.TabIndex = 12;
@@ -243,7 +246,7 @@ namespace myRTSPStreamer
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(1000, 10);
+            this.txtPort.Location = new System.Drawing.Point(735, 6);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(60, 26);
             this.txtPort.TabIndex = 13;
@@ -251,7 +254,7 @@ namespace myRTSPStreamer
             // 
             // txtStreamPath
             // 
-            this.txtStreamPath.Location = new System.Drawing.Point(1000, 36);
+            this.txtStreamPath.Location = new System.Drawing.Point(864, 6);
             this.txtStreamPath.Name = "txtStreamPath";
             this.txtStreamPath.Size = new System.Drawing.Size(180, 26);
             this.txtStreamPath.TabIndex = 14;
@@ -284,7 +287,7 @@ namespace myRTSPStreamer
             this.videoView1.Location = new System.Drawing.Point(0, 0);
             this.videoView1.MediaPlayer = null;
             this.videoView1.Name = "videoView1";
-            this.videoView1.Size = new System.Drawing.Size(1244, 364);
+            this.videoView1.Size = new System.Drawing.Size(1244, 354);
             this.videoView1.TabIndex = 0;
             this.videoView1.Text = "videoView1";
             // 
@@ -313,7 +316,7 @@ namespace myRTSPStreamer
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1250, 580);
@@ -325,16 +328,16 @@ namespace myRTSPStreamer
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1244, 84);
+            this.panel1.Size = new System.Drawing.Size(1244, 94);
             this.panel1.TabIndex = 0;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.videoView1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(3, 93);
+            this.panel2.Location = new System.Drawing.Point(3, 103);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1244, 364);
+            this.panel2.Size = new System.Drawing.Size(1244, 354);
             this.panel2.TabIndex = 1;
             // 
             // panel3
@@ -345,6 +348,69 @@ namespace myRTSPStreamer
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1244, 114);
             this.panel3.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 20);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Username";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(220, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 20);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Password";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(450, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 20);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "IP Address";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(691, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 20);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Port";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(816, 9);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 20);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Path";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(333, 41);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 20);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "seconds";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(497, 68);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(146, 20);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Next image number";
             // 
             // Form1
             // 
@@ -384,6 +450,13 @@ namespace myRTSPStreamer
         private Panel panel1;
         private Panel panel2;
         private Panel panel3;
+        private Label label7;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label1;
     }
 }
 
