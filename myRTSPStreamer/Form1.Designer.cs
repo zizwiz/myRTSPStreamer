@@ -51,6 +51,7 @@ namespace myRTSPStreamer
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.txtSnapshotNumber = new System.Windows.Forms.TextBox();
             this.btnBrowseFolder = new System.Windows.Forms.Button();
             this.txtSnapshotFolder = new System.Windows.Forms.TextBox();
             this.numInterval = new System.Windows.Forms.NumericUpDown();
@@ -67,15 +68,22 @@ namespace myRTSPStreamer
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtStreamPath = new System.Windows.Forms.TextBox();
             this.timerAutoSnapshot = new System.Windows.Forms.Timer(this.components);
-            this.txtSnapshotNumber = new System.Windows.Forms.TextBox();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.videoView1 = new LibVLCSharp.WinForms.VideoView();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -96,11 +104,18 @@ namespace myRTSPStreamer
             this.panelTop.Controls.Add(this.txtIpAddress);
             this.panelTop.Controls.Add(this.txtPort);
             this.panelTop.Controls.Add(this.txtStreamPath);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1250, 90);
+            this.panelTop.Size = new System.Drawing.Size(1244, 84);
             this.panelTop.TabIndex = 1;
+            // 
+            // txtSnapshotNumber
+            // 
+            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
+            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
+            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
+            this.txtSnapshotNumber.TabIndex = 17;
             // 
             // btnBrowseFolder
             // 
@@ -246,13 +261,6 @@ namespace myRTSPStreamer
             // 
             this.timerAutoSnapshot.Tick += new System.EventHandler(this.timerAutoSnapshot_Tick);
             // 
-            // txtSnapshotNumber
-            // 
-            this.txtSnapshotNumber.Location = new System.Drawing.Point(1004, 65);
-            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
-            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
-            this.txtSnapshotNumber.TabIndex = 17;
-            // 
             // lblStatus
             // 
             this.lblStatus.Name = "lblStatus";
@@ -273,33 +281,75 @@ namespace myRTSPStreamer
             // 
             this.videoView1.BackColor = System.Drawing.Color.Black;
             this.videoView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.videoView1.Location = new System.Drawing.Point(30, 97);
+            this.videoView1.Location = new System.Drawing.Point(0, 0);
             this.videoView1.MediaPlayer = null;
             this.videoView1.Name = "videoView1";
-            this.videoView1.Size = new System.Drawing.Size(389, 258);
+            this.videoView1.Size = new System.Drawing.Size(1244, 364);
             this.videoView1.TabIndex = 0;
             this.videoView1.Text = "videoView1";
             // 
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.Color.Black;
-            this.txtLog.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLog.Font = new System.Drawing.Font("Consolas", 9F);
             this.txtLog.ForeColor = System.Drawing.Color.LightGreen;
-            this.txtLog.Location = new System.Drawing.Point(0, 460);
+            this.txtLog.Location = new System.Drawing.Point(0, 0);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(1250, 120);
+            this.txtLog.Size = new System.Drawing.Size(1244, 114);
             this.txtLog.TabIndex = 0;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 2);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1250, 580);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.panelTop);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1244, 84);
+            this.panel1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.videoView1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 93);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1244, 364);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.txtLog);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(3, 463);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1244, 114);
+            this.panel3.TabIndex = 2;
             // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
-            this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.videoView1);
-            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -312,6 +362,11 @@ namespace myRTSPStreamer
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -325,6 +380,10 @@ namespace myRTSPStreamer
         private StatusStrip statusStrip1;
         private VideoView videoView1;
         private TextBox txtLog;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel1;
+        private Panel panel2;
+        private Panel panel3;
     }
 }
 
