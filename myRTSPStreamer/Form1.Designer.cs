@@ -143,7 +143,7 @@ namespace myRTSPStreamer
             this.txtSnapshotFolder.Name = "txtSnapshotFolder";
             this.txtSnapshotFolder.Size = new System.Drawing.Size(392, 26);
             this.txtSnapshotFolder.TabIndex = 1;
-            this.txtSnapshotFolder.Text = "C:\\snapshots";
+            this.txtSnapshotFolder.Text = "C:\\timelapse";
             // 
             // numInterval
             // 
