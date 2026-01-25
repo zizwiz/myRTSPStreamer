@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace myRTSPStreamer
 {
@@ -10,16 +11,21 @@ namespace myRTSPStreamer
     {
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
-       private int restartAttempts = 0;
+        private int restartAttempts = 0;
         private const int MaxRestartAttempts = 5;
         private Timer timerStreamMonitor;
 
+       
         public Form1()
         {
             InitializeComponent();
             Core.Initialize();
 
-            _libVLC = new LibVLC();
+            //_libVLC = new LibVLC(); //Disables screen from going to sleep
+
+            // Important: allow screensaver / display sleep
+            _libVLC = new LibVLC("--no-disable-screensaver"); 
+
             _mediaPlayer = new MediaPlayer(_libVLC);
 
             videoView1.MediaPlayer = _mediaPlayer;
@@ -35,7 +41,6 @@ namespace myRTSPStreamer
 
             txtSnapshotNumber.Text = "1";
             Properties.Settings.Default.LastSnapshotDate = DateTime.Now.ToShortDateString();
-
         }
 
         private void LoadSettings()
@@ -66,6 +71,7 @@ namespace myRTSPStreamer
                 timerStreamMonitor.Interval = 10000; // check every 10 seconds
                 timerStreamMonitor.Tick += timerStreamMonitor_Tick;
                 timerStreamMonitor.Start();
+                
             }
             catch (Exception ex)
             {
@@ -148,15 +154,6 @@ namespace myRTSPStreamer
                     return;
                 }
 
-                string year = DateTime.Now.ToString("yyyy");    //DateTime.Now.Year.ToString("yyyy");
-                string month = DateTime.Now.ToString("MMM");
-                string day = DateTime.Now.ToString("dd");
-
-                string folderPath = Path.Combine(basePath, year, month, day);
-                Directory.CreateDirectory(folderPath);
-
-                string timestamp = DateTime.Now.ToString("ddMMyyyy_HHmmss");
-
                 //Reset unique number if we are past midnight and clear the logfile.
                 string today = DateTime.Now.ToShortDateString();
 
@@ -172,6 +169,16 @@ namespace myRTSPStreamer
                 }
 
                 if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
+
+
+                string year = DateTime.Now.ToString("yyyy");    //DateTime.Now.Year.ToString("yyyy");
+                string month = DateTime.Now.ToString("MMM");
+                string day = DateTime.Now.ToString("dd");
+
+                string folderPath = Path.Combine(basePath, year, month, day);
+                Directory.CreateDirectory(folderPath);
+
+                string timestamp = DateTime.Now.ToString("ddMMyyyy_HHmmss");
 
                 string filename = $"{timestamp}_{snapNum}.jpg";
                 string fullPath = Path.Combine(folderPath, filename);
@@ -233,7 +240,7 @@ namespace myRTSPStreamer
             }
         }
 
-        
+
         private void btnClearLog_Click(object sender, EventArgs e)
         {
             ClearLog();
