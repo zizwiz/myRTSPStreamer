@@ -81,6 +81,7 @@ namespace myRTSPStreamer
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.btn_sync_time = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -93,6 +94,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.btn_sync_time);
             this.panelTop.Controls.Add(this.label7);
             this.panelTop.Controls.Add(this.label6);
             this.panelTop.Controls.Add(this.label5);
@@ -412,6 +414,15 @@ namespace myRTSPStreamer
             this.label7.TabIndex = 24;
             this.label7.Text = "Next image number";
             // 
+            // btn_sync_time
+            // 
+            this.btn_sync_time.Location = new System.Drawing.Point(815, 56);
+            this.btn_sync_time.Name = "btn_sync_time";
+            this.btn_sync_time.Size = new System.Drawing.Size(126, 31);
+            this.btn_sync_time.TabIndex = 25;
+            this.btn_sync_time.Text = "Sync Time";
+            this.btn_sync_time.Click += new System.EventHandler(this.btn_sync_time_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
@@ -457,6 +468,7 @@ namespace myRTSPStreamer
         private Label label3;
         private Label label2;
         private Label label1;
+        private Button btn_sync_time;
     }
 }
 

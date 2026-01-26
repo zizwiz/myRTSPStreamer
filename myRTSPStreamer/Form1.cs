@@ -1,9 +1,13 @@
 ﻿using LibVLCSharp.Shared;
 using System;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace myRTSPStreamer
 {
@@ -137,7 +141,7 @@ namespace myRTSPStreamer
             }
         }
 
-        private void SaveSnapshot()
+        private async void SaveSnapshot()
         {
             try
             {
@@ -164,8 +168,10 @@ namespace myRTSPStreamer
                     Properties.Settings.Default.LastSnapshotDate = today;
                     Properties.Settings.Default.Save();
                     Log("New day detected — snapshot counter reset to 1.");
+                    await SetTime(txtIpAddress.Text, txtUsername.Text, txtPassword.Text);
+                    Log("Time Sync carried out");
 
-                    ClearLog(); // clear log file
+                   ClearLog(); // clear log file
                 }
 
                 if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
@@ -351,6 +357,53 @@ namespace myRTSPStreamer
             }
         }
 
+        public async Task SetTime(string myCameraIP, string myUsername, string myPassword)
+        {
 
+            // Build Basic Auth header
+            var authToken = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{myUsername}:{myPassword}"));
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"http://{myCameraIP}/");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+
+                // Format current PC time as YYYYMMDDThhmmss
+                string systemTime = DateTime.Now.ToString("yyyyMMdd'T'HHmmss");
+
+                // Build XML payload
+                string xmlPayload = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                        <Time Version=""1.0"">
+                                            <DateTimeFormat>DDMMYYYYWhhmmss</DateTimeFormat>
+                                            <TimeFormat>24hour</TimeFormat>
+                                            <SystemTime>{systemTime}</SystemTime>
+                                            <SyncNTPFlag>NoSync</SyncNTPFlag>
+                                        </Time>";
+
+                var content = new StringContent(xmlPayload, Encoding.UTF8, "application/xml");
+
+                // POST or PUT depending on camera API (try PUT first)
+                HttpResponseMessage response = await client.PutAsync("System/Time", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Log("Time sync successfull");
+                    string resp = await response.Content.ReadAsStringAsync();
+                    Log(resp);
+                }
+                else
+                {
+                    Log($"Failed to sync time. Status: {response.StatusCode}");
+                    string resp = await response.Content.ReadAsStringAsync();
+                    Log(resp);
+                }
+            }
+        }
+
+        private async void btn_sync_time_Click(object sender, EventArgs e)
+        {
+            await SetTime(txtIpAddress.Text, txtUsername.Text, txtPassword.Text);
+            Log("Time Sync carried out");
+        }
     }
 }
