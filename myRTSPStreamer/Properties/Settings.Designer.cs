@@ -106,5 +106,41 @@ namespace myRTSPStreamer.Properties {
                 this["LastSnapshotDate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public decimal Interval {
+            get {
+                return ((decimal)(this["Interval"]));
+            }
+            set {
+                this["Interval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoSnapshot {
+            get {
+                return ((bool)(this["AutoSnapshot"]));
+            }
+            set {
+                this["AutoSnapshot"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Next_Image_Number {
+            get {
+                return ((string)(this["Next_Image_Number"]));
+            }
+            set {
+                this["Next_Image_Number"] = value;
+            }
+        }
     }
 }

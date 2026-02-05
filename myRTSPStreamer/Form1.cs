@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,20 +14,25 @@ namespace myRTSPStreamer
     {
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
-        private int restartAttempts = 0;
+        private int restartAttempts;
         private const int MaxRestartAttempts = 5;
         private Timer timerStreamMonitor;
+        private readonly bool startedByWatchdog = false;
 
-       
-        public Form1()
+
+        public Form1(bool myRestartMode)
         {
             InitializeComponent();
+
+            //true = watchdog is restarting it, false = open app only
+            startedByWatchdog = myRestartMode;
+
             Core.Initialize();
 
             //_libVLC = new LibVLC(); //Disables screen from going to sleep
 
-            // Important: allow screensaver / display sleep
-            _libVLC = new LibVLC("--no-disable-screensaver"); 
+            // Important: allow screensaver / display to sleep
+            _libVLC = new LibVLC("--no-disable-screensaver");
 
             _mediaPlayer = new MediaPlayer(_libVLC);
 
@@ -41,10 +45,20 @@ namespace myRTSPStreamer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            LoadSettings(); //load settings from last session
             Text += " : v" + Assembly.GetExecutingAssembly().GetName().Version; // put in the version number
 
-            txtSnapshotNumber.Text = "1";
+            txtbx_Next_Image_Number.Text = "1"; //reset to 1
             Properties.Settings.Default.LastSnapshotDate = DateTime.Now.ToShortDateString();
+
+            if (startedByWatchdog)
+            {
+                Start(); //Auto start app
+                Log("Auto restart as App was locked: " + DateTime.Now.ToString("HHmmss"));
+                
+                // overwrite with last saved number
+                txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
+            }
         }
 
         private void LoadSettings()
@@ -55,11 +69,20 @@ namespace myRTSPStreamer
             txtPort.Text = Properties.Settings.Default.Port;
             txtStreamPath.Text = Properties.Settings.Default.StreamPath;
             txtSnapshotFolder.Text = Properties.Settings.Default.SnapshotFolder;
+            numupdn_Interval.Value = Properties.Settings.Default.Interval;
+            chkbx_AutoSnapshot.Checked = Properties.Settings.Default.AutoSnapshot;
+            txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            Start();
+        }
+
+        private void Start()
+        {
             try
+
             {
                 string rtspUrl = BuildRtspUrl();
                 Log("Starting stream: " + rtspUrl);
@@ -75,7 +98,7 @@ namespace myRTSPStreamer
                 timerStreamMonitor.Interval = 10000; // check every 10 seconds
                 timerStreamMonitor.Tick += timerStreamMonitor_Tick;
                 timerStreamMonitor.Start();
-                
+
             }
             catch (Exception ex)
             {
@@ -129,9 +152,9 @@ namespace myRTSPStreamer
 
         private void UpdateTimerFromUI()
         {
-            if (chkAutoSnapshot.Checked)
+            if (chkbx_AutoSnapshot.Checked)
             {
-                int seconds = (int)numInterval.Value;
+                int seconds = (int)numupdn_Interval.Value;
                 timerAutoSnapshot.Interval = seconds * 1000;
                 timerAutoSnapshot.Start();
             }
@@ -164,17 +187,17 @@ namespace myRTSPStreamer
                 if (Properties.Settings.Default.LastSnapshotDate != today)
                 {
                     // New day → reset counter
-                    txtSnapshotNumber.Text = "1";
+                    txtbx_Next_Image_Number.Text = "1";
                     Properties.Settings.Default.LastSnapshotDate = today;
                     Properties.Settings.Default.Save();
                     Log("New day detected — snapshot counter reset to 1.");
                     await SetTime(txtIpAddress.Text, txtUsername.Text, txtPassword.Text);
                     Log("Time Sync carried out");
 
-                   ClearLog(); // clear log file
+                    ClearLog(); // clear log file
                 }
 
-                if (!int.TryParse(txtSnapshotNumber.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
+                if (!int.TryParse(txtbx_Next_Image_Number.Text, out int snapNum)) snapNum = 1;//if garbage reset to 1
 
 
                 string year = DateTime.Now.ToString("yyyy");    //DateTime.Now.Year.ToString("yyyy");
@@ -190,10 +213,15 @@ namespace myRTSPStreamer
                 string fullPath = Path.Combine(folderPath, filename);
 
                 _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
+                UpdateHeartbeat(folderPath);
 
                 // Increment for next time
                 snapNum++;
-                txtSnapshotNumber.Text = snapNum.ToString();
+                txtbx_Next_Image_Number.Text = snapNum.ToString();
+
+                // Save incase it gets watchdog reset
+                Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
+                Properties.Settings.Default.Save();
 
 
                 // Get file size
@@ -303,6 +331,9 @@ namespace myRTSPStreamer
             Properties.Settings.Default.Port = txtPort.Text;
             Properties.Settings.Default.StreamPath = txtStreamPath.Text;
             Properties.Settings.Default.SnapshotFolder = txtSnapshotFolder.Text;
+            Properties.Settings.Default.Interval = numupdn_Interval.Value;
+            Properties.Settings.Default.AutoSnapshot = chkbx_AutoSnapshot.Checked;
+            Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
 
             Properties.Settings.Default.Save();
         }
@@ -405,5 +436,27 @@ namespace myRTSPStreamer
             await SetTime(txtIpAddress.Text, txtUsername.Text, txtPassword.Text);
             Log("Time Sync carried out");
         }
+
+        private void btn_save_settings_Click(object sender, EventArgs e)
+        {
+            SaveSettings();
+        }
+
+        private void UpdateHeartbeat(string myHeartBeatPath)
+        {
+            //heartbeat stored on drive C:
+            myHeartBeatPath = "C" + myHeartBeatPath.Substring(1) + "\\heartbeat.txt";
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(myHeartBeatPath));
+                File.WriteAllText(myHeartBeatPath, DateTime.Now.ToString("O"));
+            }
+            catch
+            {
+                // Optional: log or ignore
+            }
+        }
+
     }
 }

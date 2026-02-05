@@ -13,8 +13,8 @@ namespace myRTSPStreamer
         private Button btnStart;
         private Button btnStop;
         private Button btnSnapshot;
-        private CheckBox chkAutoSnapshot;
-        private NumericUpDown numInterval;
+        private CheckBox chkbx_AutoSnapshot;
+        private NumericUpDown numupdn_Interval;
         private TextBox txtSnapshotFolder;
         private Button btnBrowseFolder;
         private Timer timerAutoSnapshot;
@@ -50,11 +50,19 @@ namespace myRTSPStreamer
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
-            this.txtSnapshotNumber = new System.Windows.Forms.TextBox();
+            this.btn_sync_time = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtbx_Next_Image_Number = new System.Windows.Forms.TextBox();
             this.btnBrowseFolder = new System.Windows.Forms.Button();
             this.txtSnapshotFolder = new System.Windows.Forms.TextBox();
-            this.numInterval = new System.Windows.Forms.NumericUpDown();
-            this.chkAutoSnapshot = new System.Windows.Forms.CheckBox();
+            this.numupdn_Interval = new System.Windows.Forms.NumericUpDown();
+            this.chkbx_AutoSnapshot = new System.Windows.Forms.CheckBox();
             this.btnSnapshot = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
@@ -74,16 +82,9 @@ namespace myRTSPStreamer
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.btn_sync_time = new System.Windows.Forms.Button();
+            this.btn_save_settings = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -94,6 +95,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.btn_save_settings);
             this.panelTop.Controls.Add(this.btn_sync_time);
             this.panelTop.Controls.Add(this.label7);
             this.panelTop.Controls.Add(this.label6);
@@ -102,11 +104,11 @@ namespace myRTSPStreamer
             this.panelTop.Controls.Add(this.label3);
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.label1);
-            this.panelTop.Controls.Add(this.txtSnapshotNumber);
+            this.panelTop.Controls.Add(this.txtbx_Next_Image_Number);
             this.panelTop.Controls.Add(this.btnBrowseFolder);
             this.panelTop.Controls.Add(this.txtSnapshotFolder);
-            this.panelTop.Controls.Add(this.numInterval);
-            this.panelTop.Controls.Add(this.chkAutoSnapshot);
+            this.panelTop.Controls.Add(this.numupdn_Interval);
+            this.panelTop.Controls.Add(this.chkbx_AutoSnapshot);
             this.panelTop.Controls.Add(this.btnSnapshot);
             this.panelTop.Controls.Add(this.btnStop);
             this.panelTop.Controls.Add(this.btnStart);
@@ -123,12 +125,84 @@ namespace myRTSPStreamer
             this.panelTop.Size = new System.Drawing.Size(1244, 94);
             this.panelTop.TabIndex = 1;
             // 
-            // txtSnapshotNumber
+            // btn_sync_time
             // 
-            this.txtSnapshotNumber.Location = new System.Drawing.Point(649, 63);
-            this.txtSnapshotNumber.Name = "txtSnapshotNumber";
-            this.txtSnapshotNumber.Size = new System.Drawing.Size(125, 26);
-            this.txtSnapshotNumber.TabIndex = 17;
+            this.btn_sync_time.Location = new System.Drawing.Point(815, 56);
+            this.btn_sync_time.Name = "btn_sync_time";
+            this.btn_sync_time.Size = new System.Drawing.Size(126, 31);
+            this.btn_sync_time.TabIndex = 25;
+            this.btn_sync_time.Text = "Sync Time";
+            this.btn_sync_time.Click += new System.EventHandler(this.btn_sync_time_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(497, 68);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(146, 20);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Next image number";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(333, 41);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 20);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "seconds";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(726, 9);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 20);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Path";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(616, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 20);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Port";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(397, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 20);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "IP Address";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(207, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 20);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Password";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 20);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Username";
+            // 
+            // txtbx_Next_Image_Number
+            // 
+            this.txtbx_Next_Image_Number.Location = new System.Drawing.Point(649, 63);
+            this.txtbx_Next_Image_Number.Name = "txtbx_Next_Image_Number";
+            this.txtbx_Next_Image_Number.Size = new System.Drawing.Size(125, 26);
+            this.txtbx_Next_Image_Number.TabIndex = 17;
             // 
             // btnBrowseFolder
             // 
@@ -147,36 +221,38 @@ namespace myRTSPStreamer
             this.txtSnapshotFolder.TabIndex = 1;
             this.txtSnapshotFolder.Text = "C:\\timelapse";
             // 
-            // numInterval
+            // numupdn_Interval
             // 
-            this.numInterval.Location = new System.Drawing.Point(207, 39);
-            this.numInterval.Maximum = new decimal(new int[] {
+            this.numupdn_Interval.Location = new System.Drawing.Point(207, 39);
+            this.numupdn_Interval.Maximum = new decimal(new int[] {
             3600,
             0,
             0,
             0});
-            this.numInterval.Minimum = new decimal(new int[] {
+            this.numupdn_Interval.Minimum = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.numInterval.Name = "numInterval";
-            this.numInterval.Size = new System.Drawing.Size(120, 26);
-            this.numInterval.TabIndex = 2;
-            this.numInterval.Value = new decimal(new int[] {
+            this.numupdn_Interval.Name = "numupdn_Interval";
+            this.numupdn_Interval.Size = new System.Drawing.Size(120, 26);
+            this.numupdn_Interval.TabIndex = 2;
+            this.numupdn_Interval.Value = new decimal(new int[] {
             60,
             0,
             0,
             0});
             // 
-            // chkAutoSnapshot
+            // chkbx_AutoSnapshot
             // 
-            this.chkAutoSnapshot.Location = new System.Drawing.Point(12, 39);
-            this.chkAutoSnapshot.Name = "chkAutoSnapshot";
-            this.chkAutoSnapshot.Size = new System.Drawing.Size(189, 26);
-            this.chkAutoSnapshot.TabIndex = 3;
-            this.chkAutoSnapshot.Text = "Auto snapshot every";
-            this.chkAutoSnapshot.CheckedChanged += new System.EventHandler(this.chkAutoSnapshot_CheckedChanged);
+            this.chkbx_AutoSnapshot.Checked = true;
+            this.chkbx_AutoSnapshot.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbx_AutoSnapshot.Location = new System.Drawing.Point(12, 39);
+            this.chkbx_AutoSnapshot.Name = "chkbx_AutoSnapshot";
+            this.chkbx_AutoSnapshot.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_AutoSnapshot.TabIndex = 3;
+            this.chkbx_AutoSnapshot.Text = "Auto snapshot every";
+            this.chkbx_AutoSnapshot.CheckedChanged += new System.EventHandler(this.chkAutoSnapshot_CheckedChanged);
             // 
             // btnSnapshot
             // 
@@ -189,18 +265,18 @@ namespace myRTSPStreamer
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(1136, 7);
+            this.btnStop.Location = new System.Drawing.Point(1026, 5);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(60, 25);
+            this.btnStop.Size = new System.Drawing.Size(60, 29);
             this.btnStop.TabIndex = 5;
             this.btnStop.Text = "Stop";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(1070, 7);
+            this.btnStart.Location = new System.Drawing.Point(960, 6);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(60, 25);
+            this.btnStart.Size = new System.Drawing.Size(60, 28);
             this.btnStart.TabIndex = 6;
             this.btnStart.Text = "Start";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -233,14 +309,14 @@ namespace myRTSPStreamer
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(304, 6);
+            this.txtPassword.Location = new System.Drawing.Point(291, 6);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(100, 26);
             this.txtPassword.TabIndex = 11;
             // 
             // txtIpAddress
             // 
-            this.txtIpAddress.Location = new System.Drawing.Point(543, 6);
+            this.txtIpAddress.Location = new System.Drawing.Point(490, 6);
             this.txtIpAddress.Name = "txtIpAddress";
             this.txtIpAddress.Size = new System.Drawing.Size(120, 26);
             this.txtIpAddress.TabIndex = 12;
@@ -248,7 +324,7 @@ namespace myRTSPStreamer
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(735, 6);
+            this.txtPort.Location = new System.Drawing.Point(660, 6);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(60, 26);
             this.txtPort.TabIndex = 13;
@@ -256,7 +332,7 @@ namespace myRTSPStreamer
             // 
             // txtStreamPath
             // 
-            this.txtStreamPath.Location = new System.Drawing.Point(864, 6);
+            this.txtStreamPath.Location = new System.Drawing.Point(774, 6);
             this.txtStreamPath.Name = "txtStreamPath";
             this.txtStreamPath.Size = new System.Drawing.Size(180, 26);
             this.txtStreamPath.TabIndex = 14;
@@ -351,77 +427,14 @@ namespace myRTSPStreamer
             this.panel3.Size = new System.Drawing.Size(1244, 114);
             this.panel3.TabIndex = 2;
             // 
-            // label1
+            // btn_save_settings
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 20);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "Username";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(220, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 20);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Password";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(450, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 20);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "IP Address";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(691, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 20);
-            this.label4.TabIndex = 21;
-            this.label4.Text = "Port";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(816, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 20);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Path";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(333, 41);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 20);
-            this.label6.TabIndex = 23;
-            this.label6.Text = "seconds";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(497, 68);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(146, 20);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "Next image number";
-            // 
-            // btn_sync_time
-            // 
-            this.btn_sync_time.Location = new System.Drawing.Point(815, 56);
-            this.btn_sync_time.Name = "btn_sync_time";
-            this.btn_sync_time.Size = new System.Drawing.Size(126, 31);
-            this.btn_sync_time.TabIndex = 25;
-            this.btn_sync_time.Text = "Sync Time";
-            this.btn_sync_time.Click += new System.EventHandler(this.btn_sync_time_Click);
+            this.btn_save_settings.Location = new System.Drawing.Point(1092, 6);
+            this.btn_save_settings.Name = "btn_save_settings";
+            this.btn_save_settings.Size = new System.Drawing.Size(121, 29);
+            this.btn_save_settings.TabIndex = 26;
+            this.btn_save_settings.Text = "Save Settings";
+            this.btn_save_settings.Click += new System.EventHandler(this.btn_save_settings_Click);
             // 
             // Form1
             // 
@@ -435,7 +448,7 @@ namespace myRTSPStreamer
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
@@ -452,7 +465,7 @@ namespace myRTSPStreamer
 
         #endregion
 
-        private TextBox txtSnapshotNumber;
+        private TextBox txtbx_Next_Image_Number;
         private ToolStripStatusLabel lblStatus;
         private StatusStrip statusStrip1;
         private VideoView videoView1;
@@ -469,6 +482,7 @@ namespace myRTSPStreamer
         private Label label2;
         private Label label1;
         private Button btn_sync_time;
+        private Button btn_save_settings;
     }
 }
 
