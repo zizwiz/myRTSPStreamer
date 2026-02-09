@@ -16,27 +16,17 @@ namespace myRTSPStreamer
         private MediaPlayer _mediaPlayer;
         private int restartAttempts;
         private const int MaxRestartAttempts = 5;
-       // private Timer timerStreamMonitor;
         private readonly bool startedByWatchdog = false;
 
 
         public Form1(bool myRestartMode)
         {
-            InitializeComponent();
+            InitializeComponent(); // initialises libVLCSharp
 
             //true = watchdog is restarting it, false = open app only
             startedByWatchdog = myRestartMode;
 
             Core.Initialize();
-
-            //_libVLC = new LibVLC(); //Disables screen from going to sleep
-
-            // Important: allow screensaver / display to sleep
-            //_libVLC = new LibVLC("--no-disable-screensaver");
-
-            //_mediaPlayer = new MediaPlayer(_libVLC);
-
-            //videoView1.MediaPlayer = _mediaPlayer;
 
             timerAutoSnapshot.Interval = 60000; // default, will be updated from numInterval
 
@@ -98,31 +88,6 @@ namespace myRTSPStreamer
             {
                 Log("Error starting stream: " + ex.Message);
             }
-
-
-            //try
-
-            //{
-            //    string rtspUrl = BuildRtspUrl();
-            //    Log("Starting stream: " + rtspUrl);
-
-            //    var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
-            //    _mediaPlayer.Play(media);
-
-            //    UpdateTimerFromUI();
-            //    lblStatus.Text = "Streaming...";
-
-            //    //Timer to check if stream is alive, if not restart it.
-            //    timerStreamMonitor = new Timer();
-            //    timerStreamMonitor.Interval = 10000; // check every 10 seconds
-            //    timerStreamMonitor.Tick += timerStreamMonitor_Tick;
-            //    timerStreamMonitor.Start();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    Log("Error starting stream: " + ex.Message);
-            //}
         }
 
 
@@ -415,6 +380,7 @@ namespace myRTSPStreamer
             }
         }
 
+        //Sync camera to laptop time
         public async Task SetTime(string myCameraIP, string myUsername, string myPassword)
         {
 
@@ -487,10 +453,7 @@ namespace myRTSPStreamer
 
         private void InitialiseVlc()
         {
-            //_libVLC = new LibVLC();
-            //_mediaPlayer = new MediaPlayer(_libVLC);
-
-            _libVLC = new LibVLC("--no-disable-screensaver");
+            _libVLC = new LibVLC("--no-disable-screensaver"); //parameter will allow screen to sleep
             _mediaPlayer = new MediaPlayer(_libVLC);
             videoView1.MediaPlayer = _mediaPlayer;
 
