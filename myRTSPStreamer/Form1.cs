@@ -16,7 +16,7 @@ namespace myRTSPStreamer
         private MediaPlayer _mediaPlayer;
         private int restartAttempts;
         private const int MaxRestartAttempts = 5;
-        private Timer timerStreamMonitor;
+       // private Timer timerStreamMonitor;
         private readonly bool startedByWatchdog = false;
 
 
@@ -32,11 +32,11 @@ namespace myRTSPStreamer
             //_libVLC = new LibVLC(); //Disables screen from going to sleep
 
             // Important: allow screensaver / display to sleep
-            _libVLC = new LibVLC("--no-disable-screensaver");
+            //_libVLC = new LibVLC("--no-disable-screensaver");
 
-            _mediaPlayer = new MediaPlayer(_libVLC);
+            //_mediaPlayer = new MediaPlayer(_libVLC);
 
-            videoView1.MediaPlayer = _mediaPlayer;
+            //videoView1.MediaPlayer = _mediaPlayer;
 
             timerAutoSnapshot.Interval = 60000; // default, will be updated from numInterval
 
@@ -45,6 +45,8 @@ namespace myRTSPStreamer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            InitialiseVlc();
+
             LoadSettings(); //load settings from last session
             Text += " : v" + Assembly.GetExecutingAssembly().GetName().Version; // put in the version number
 
@@ -82,7 +84,6 @@ namespace myRTSPStreamer
         private void Start()
         {
             try
-
             {
                 string rtspUrl = BuildRtspUrl();
                 Log("Starting stream: " + rtspUrl);
@@ -90,20 +91,38 @@ namespace myRTSPStreamer
                 var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
                 _mediaPlayer.Play(media);
 
-                UpdateTimerFromUI();
                 lblStatus.Text = "Streaming...";
-
-                //Timer to check if stream is alive, if not restart it.
-                timerStreamMonitor = new Timer();
-                timerStreamMonitor.Interval = 10000; // check every 10 seconds
-                timerStreamMonitor.Tick += timerStreamMonitor_Tick;
-                timerStreamMonitor.Start();
-
+                restartAttempts = 0;
             }
             catch (Exception ex)
             {
                 Log("Error starting stream: " + ex.Message);
             }
+
+
+            //try
+
+            //{
+            //    string rtspUrl = BuildRtspUrl();
+            //    Log("Starting stream: " + rtspUrl);
+
+            //    var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
+            //    _mediaPlayer.Play(media);
+
+            //    UpdateTimerFromUI();
+            //    lblStatus.Text = "Streaming...";
+
+            //    //Timer to check if stream is alive, if not restart it.
+            //    timerStreamMonitor = new Timer();
+            //    timerStreamMonitor.Interval = 10000; // check every 10 seconds
+            //    timerStreamMonitor.Tick += timerStreamMonitor_Tick;
+            //    timerStreamMonitor.Start();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log("Error starting stream: " + ex.Message);
+            //}
         }
 
 
@@ -113,7 +132,7 @@ namespace myRTSPStreamer
             {
                 _mediaPlayer.Stop();
                 timerAutoSnapshot.Stop();
-                timerStreamMonitor.Stop();
+               // timerStreamMonitor.Stop();
                 lblStatus.Text = "Stopped";
             }
             catch (Exception ex)
@@ -256,8 +275,16 @@ namespace myRTSPStreamer
 
             Directory.CreateDirectory(FolderPath); //create if not already there
 
-            // Write to on-screen log
-            txtLog.AppendText(line + Environment.NewLine);
+            txtLog.Invoke(new Action(() => { txtLog.AppendText(line + Environment.NewLine); }));
+
+            //if (InvokeRequired)
+            //{
+            //    Invoke((MethodInvoker)delegate
+            //    {
+            //        // Write to on-screen log
+            //        txtLog.AppendText(line + Environment.NewLine);
+            //    });
+            //}
 
             // Write to log.txt if snapshot folder is set
             try
@@ -458,5 +485,54 @@ namespace myRTSPStreamer
             }
         }
 
+        private void InitialiseVlc()
+        {
+            //_libVLC = new LibVLC();
+            //_mediaPlayer = new MediaPlayer(_libVLC);
+
+            _libVLC = new LibVLC("--no-disable-screensaver");
+            _mediaPlayer = new MediaPlayer(_libVLC);
+            videoView1.MediaPlayer = _mediaPlayer;
+
+            _mediaPlayer.EncounteredError += MediaPlayer_EncounteredError;
+            _mediaPlayer.Stopped += MediaPlayer_Stopped;
+            _mediaPlayer.EndReached += MediaPlayer_EndReached;
+        }
+
+        private void MediaPlayer_EncounteredError(object sender, EventArgs e)
+        {
+            Log("VLC reported an error — likely network loss.");
+            RestartStreamWithBackoff();
+        }
+
+        private void MediaPlayer_Stopped(object sender, EventArgs e)
+        {
+            Log("VLC stopped unexpectedly.");
+            RestartStreamWithBackoff();
+        }
+
+        private void MediaPlayer_EndReached(object sender, EventArgs e)
+        {
+            Log("Stream ended (EndReached).");
+            RestartStreamWithBackoff();
+        }
+
+        private void RestartStreamWithBackoff()
+        {
+            restartAttempts++;
+
+            if (restartAttempts > MaxRestartAttempts)
+            {
+                Log("Max restart attempts reached. Giving up.");
+                return;
+            }
+
+            Log($"Restart attempt {restartAttempts}/{MaxRestartAttempts}...");
+
+            Task.Delay(2000 * restartAttempts).ContinueWith(_ =>
+            {
+                TryRestartStream();
+            });
+        }
     }
 }
