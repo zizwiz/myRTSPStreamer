@@ -1,5 +1,6 @@
 ﻿using LibVLCSharp.Shared;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,6 +18,7 @@ namespace myRTSPStreamer
         private int restartAttempts;
         private const int MaxRestartAttempts = 5;
         private readonly bool startedByWatchdog = false;
+        private bool heartbeat = true; //flag used to determine if we should write the heartbeat file or not
 
 
         public Form1(bool myRestartMode)
@@ -197,7 +199,7 @@ namespace myRTSPStreamer
                 string fullPath = Path.Combine(folderPath, filename);
 
                 _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
-                UpdateHeartbeat(folderPath);
+               
 
                 // Increment for next time
                 snapNum++;
@@ -213,10 +215,13 @@ namespace myRTSPStreamer
                 string sizeText = $"{fileSize / 1024.0:F2} KB";
 
                 Log($"Snapshot saved: {filename} ({sizeText})");
+                UpdateHeartbeat(folderPath);
             }
             catch (Exception ex)
             {
+                // Something is not working, stop the heartbeat and wait for watchdog to kill and restart app
                 Log("Error saving snapshot: " + ex.Message);
+                heartbeat = false;
             }
         }
 
@@ -442,8 +447,13 @@ namespace myRTSPStreamer
 
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(myHeartBeatPath));
-                File.WriteAllText(myHeartBeatPath, DateTime.Now.ToString("O"));
+                // Only write if we think all is running this will allow watchdog to kill app and restart
+                if (heartbeat)
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(myHeartBeatPath));
+                    File.WriteAllText(myHeartBeatPath, DateTime.Now.ToString("O"));
+                }
+                
             }
             catch
             {
