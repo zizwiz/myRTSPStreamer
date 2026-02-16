@@ -47,6 +47,7 @@ namespace myRTSPStreamer
 
             if (startedByWatchdog)
             {
+                chkbx_AutoSnapshot.Checked = false; //make sure unchecked
                 Start(); //Auto start app
                 Log("Auto restart as App was locked: " + DateTime.Now.ToString("HHmmss"));
                 
@@ -151,7 +152,7 @@ namespace myRTSPStreamer
             if (chkbx_AutoSnapshot.Checked)
             {
                 int seconds = (int)numupdn_Interval.Value;
-                timerAutoSnapshot.Interval = seconds * 1000;
+                timerAutoSnapshot.Interval = seconds * 1000; 
                 timerAutoSnapshot.Start();
             }
             else
@@ -450,7 +451,7 @@ namespace myRTSPStreamer
             SaveSettings();
         }
 
-        private void UpdateHeartbeat(string myHeartBeatPath)
+        private async void UpdateHeartbeat(string myHeartBeatPath)
         {
             //heartbeat stored on drive C:
             myHeartBeatPath = "C" + myHeartBeatPath.Substring(1) + "\\heartbeat.txt";
@@ -460,6 +461,8 @@ namespace myRTSPStreamer
                 // Only write if we think all is running this will allow watchdog to kill app and restart
                 if (heartbeat)
                 {
+                    File.Delete(myHeartBeatPath);
+                    await Task.Delay(1000);
                     Directory.CreateDirectory(Path.GetDirectoryName(myHeartBeatPath));
                     File.WriteAllText(myHeartBeatPath, DateTime.Now.ToString("O"));
                 }
