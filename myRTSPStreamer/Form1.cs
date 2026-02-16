@@ -70,19 +70,29 @@ namespace myRTSPStreamer
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            chkbx_AutoSnapshot.Checked = false; //make sure unchecked
             Start();
         }
 
-        private void Start()
+        private async void Start()
         {
             try
             {
+               chkbx_AutoSnapshot.Checked = true; //change to checked to autorun
+
                 string rtspUrl = BuildRtspUrl();
                 Log("Starting stream: " + rtspUrl);
+                lblStatus.Text = "Connecting...";
 
                 var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
                 _mediaPlayer.Play(media);
+                
+                while (!_mediaPlayer.IsPlaying) //still connecting and starting
+                {
+                    await Task.Delay(10000); //delay 1 second incase we have slow network connection
+                }
 
+                SaveSnapshot(); //all is working take first snapshot
                 lblStatus.Text = "Streaming...";
                 restartAttempts = 0;
             }
