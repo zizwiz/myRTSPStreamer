@@ -93,6 +93,10 @@ namespace myRTSPStreamer
                     await Task.Delay(10000); //delay 1 second incase we have slow network connection
                 }
 
+                //sync the time with the laptop
+                SetTime(txtIpAddress.Text, txtUsername.Text, txtPassword.Text);
+                await Task.Delay(5000); //delay 0.5 second in case we have slow network connection
+
                 SaveSnapshot(); //all is working take first snapshot
                 lblStatus.Text = "Streaming...";
                 restartAttempts = 0;
