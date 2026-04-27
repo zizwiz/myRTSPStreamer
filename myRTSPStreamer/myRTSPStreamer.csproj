@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="camera.ico" />
+    <Content Include="ftpConfig.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

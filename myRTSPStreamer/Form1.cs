@@ -1,7 +1,9 @@
 ﻿using LibVLCSharp.Shared;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -19,7 +21,8 @@ namespace myRTSPStreamer
         private const int MaxRestartAttempts = 5;
         private readonly bool startedByWatchdog = false;
         private bool heartbeat = true; //flag used to determine if we should write the heartbeat file or not
-
+        private string ftpUser = "";
+        private string ftpPass = "";
 
         public Form1(bool myRestartMode)
         {
@@ -40,6 +43,7 @@ namespace myRTSPStreamer
             InitialiseVlc();
 
             LoadSettings(); //load settings from last session
+            LoadConfig();
             Text += " : v" + Assembly.GetExecutingAssembly().GetName().Version; // put in the version number
 
             txtbx_Next_Image_Number.Text = "1"; //reset to 1
@@ -56,6 +60,38 @@ namespace myRTSPStreamer
             }
         }
 
+        private void LoadConfig()
+        {
+            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ftpconfig.txt");
+
+            try
+            {
+                if (!File.Exists(configPath))
+                {
+                    Log("ftpconfig.txt missing.");
+                    return;
+                }
+
+                Dictionary<string, string> cfg = new Dictionary<string, string>();
+
+                foreach (string line in File.ReadAllLines(configPath))
+                {
+                    if (line.Contains("="))
+                    {
+                        string[] parts = line.Split('=');
+                        cfg[parts[0].Trim().ToLower()] = parts[1].Trim();
+                    }
+                }
+
+                ftpUser = cfg.ContainsKey("username") ? cfg["username"] : "";
+                ftpPass = cfg.ContainsKey("password") ? cfg["password"] : "";
+            }
+            catch (Exception ex)
+            {
+               Log("Config load error: " + ex.Message);
+            }
+        }
+
         private void LoadSettings()
         {
             txtUsername.Text = Properties.Settings.Default.Username;
@@ -67,6 +103,7 @@ namespace myRTSPStreamer
             numupdn_Interval.Value = Properties.Settings.Default.Interval;
             chkbx_AutoSnapshot.Checked = Properties.Settings.Default.AutoSnapshot;
             txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
+            chkbx_ftp.Checked = Properties.Settings.Default.FTP;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -223,13 +260,13 @@ namespace myRTSPStreamer
                 // Save incase it gets watchdog reset
                 Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
                 Properties.Settings.Default.Save();
-
-
+                
                 // Get file size
                 long fileSize = new FileInfo(fullPath).Length;
                 string sizeText = $"{fileSize / 1024.0:F2} KB";
 
                 Log($"Snapshot saved: {filename} ({sizeText})");
+                if (chkbx_ftp.Checked) UploadImage(fullPath); //ftp image to website
                 UpdateHeartbeat(folderPath);
             }
             catch (Exception ex)
@@ -237,6 +274,54 @@ namespace myRTSPStreamer
                 // Something is not working, stop the heartbeat and wait for watchdog to kill and restart app
                 Log("Error saving snapshot: " + ex.Message);
                 heartbeat = false;
+            }
+        }
+
+        private void UploadImage(string FullFilePath)
+        {
+            string localFile = FullFilePath; //Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "west.jpg");
+            string ftpUrl = "ftp://ftpupload.net/htdocs/twotwofly/images/west.jpg";
+
+           
+
+            try
+            {
+                if (!File.Exists(localFile))
+                {
+                    Log("Local file not found: " + localFile);
+                    return;
+                }
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential(ftpUser, ftpPass);
+                request.EnableSsl = false;
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+
+                byte[] fileContents = File.ReadAllBytes(localFile);
+                request.ContentLength = fileContents.Length;
+
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(fileContents, 0, fileContents.Length);
+                }
+            }
+            catch (WebException ex)
+            {
+                string ftpResponse = "";
+
+                if (ex.Response is FtpWebResponse ftpEx)
+                {
+                    ftpResponse = ftpEx.StatusDescription;
+                }
+
+                Log("FTP error: " + ex.Message + " | Server: " + ftpResponse);
+            }
+            catch (Exception ex)
+            {
+               Log("General error: " + ex.Message);
             }
         }
 
@@ -346,6 +431,7 @@ namespace myRTSPStreamer
             Properties.Settings.Default.Interval = numupdn_Interval.Value;
             Properties.Settings.Default.AutoSnapshot = chkbx_AutoSnapshot.Checked;
             Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
+            Properties.Settings.Default.FTP = chkbx_ftp.Checked;
 
             Properties.Settings.Default.Save();
         }

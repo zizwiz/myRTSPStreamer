@@ -50,6 +50,7 @@ namespace myRTSPStreamer
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btn_save_settings = new System.Windows.Forms.Button();
             this.btn_sync_time = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -82,7 +83,7 @@ namespace myRTSPStreamer
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.btn_save_settings = new System.Windows.Forms.Button();
+            this.chkbx_ftp = new System.Windows.Forms.CheckBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -95,6 +96,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.chkbx_ftp);
             this.panelTop.Controls.Add(this.btn_save_settings);
             this.panelTop.Controls.Add(this.btn_sync_time);
             this.panelTop.Controls.Add(this.label7);
@@ -124,6 +126,15 @@ namespace myRTSPStreamer
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1244, 94);
             this.panelTop.TabIndex = 1;
+            // 
+            // btn_save_settings
+            // 
+            this.btn_save_settings.Location = new System.Drawing.Point(1092, 6);
+            this.btn_save_settings.Name = "btn_save_settings";
+            this.btn_save_settings.Size = new System.Drawing.Size(121, 29);
+            this.btn_save_settings.TabIndex = 26;
+            this.btn_save_settings.Text = "Save Settings";
+            this.btn_save_settings.Click += new System.EventHandler(this.btn_save_settings_Click);
             // 
             // btn_sync_time
             // 
@@ -427,14 +438,15 @@ namespace myRTSPStreamer
             this.panel3.Size = new System.Drawing.Size(1244, 114);
             this.panel3.TabIndex = 2;
             // 
-            // btn_save_settings
+            // chkbx_ftp
             // 
-            this.btn_save_settings.Location = new System.Drawing.Point(1092, 6);
-            this.btn_save_settings.Name = "btn_save_settings";
-            this.btn_save_settings.Size = new System.Drawing.Size(121, 29);
-            this.btn_save_settings.TabIndex = 26;
-            this.btn_save_settings.Text = "Save Settings";
-            this.btn_save_settings.Click += new System.EventHandler(this.btn_save_settings_Click);
+            this.chkbx_ftp.Checked = true;
+            this.chkbx_ftp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbx_ftp.Location = new System.Drawing.Point(501, 38);
+            this.chkbx_ftp.Name = "chkbx_ftp";
+            this.chkbx_ftp.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_ftp.TabIndex = 27;
+            this.chkbx_ftp.Text = "FTP Image";
             // 
             // Form1
             // 
@@ -483,6 +495,7 @@ namespace myRTSPStreamer
         private Label label1;
         private Button btn_sync_time;
         private Button btn_save_settings;
+        private CheckBox chkbx_ftp;
     }
 }
 
