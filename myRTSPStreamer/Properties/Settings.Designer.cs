@@ -154,5 +154,17 @@ namespace myRTSPStreamer.Properties {
                 this["FTP"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveImage {
+            get {
+                return ((bool)(this["SaveImage"]));
+            }
+            set {
+                this["SaveImage"] = value;
+            }
+        }
     }
 }

@@ -21,8 +21,8 @@ namespace myRTSPStreamer
         private const int MaxRestartAttempts = 5;
         private readonly bool startedByWatchdog = false;
         private bool heartbeat = true; //flag used to determine if we should write the heartbeat file or not
-        private string ftpUser = "";
-        private string ftpPass = "";
+        private string ftpUser = ""; //used to read from text file username=ABC
+        private string ftpPass = ""; //used to read from text file password=XyZ
 
         public Form1(bool myRestartMode)
         {
@@ -104,6 +104,7 @@ namespace myRTSPStreamer
             chkbx_AutoSnapshot.Checked = Properties.Settings.Default.AutoSnapshot;
             txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
             chkbx_ftp.Checked = Properties.Settings.Default.FTP;
+            chkbx_save_image.Checked = Properties.Settings.Default.SaveImage;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -248,19 +249,24 @@ namespace myRTSPStreamer
                 string timestamp = DateTime.Now.ToString("ddMMyyyy_HHmmss");
 
                 string filename = $"{timestamp}_{snapNum}.jpg";
+
+                if (!chkbx_save_image.Checked) filename = $"west.jpg"; //We are not storing images locally
+
                 string fullPath = Path.Combine(folderPath, filename);
 
                 _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
-               
 
-                // Increment for next time
-                snapNum++;
-                txtbx_Next_Image_Number.Text = snapNum.ToString();
+                if (chkbx_save_image.Checked) // only increment if saving locally
+                {
+                    // Increment for next time
+                    snapNum++;
+                    txtbx_Next_Image_Number.Text = snapNum.ToString();
 
-                // Save incase it gets watchdog reset
-                Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
-                Properties.Settings.Default.Save();
-                
+                    // Save in case it gets watchdog reset
+                    Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
+                    Properties.Settings.Default.Save();
+                }
+
                 // Get file size
                 long fileSize = new FileInfo(fullPath).Length;
                 string sizeText = $"{fileSize / 1024.0:F2} KB";
@@ -307,6 +313,13 @@ namespace myRTSPStreamer
                 {
                     requestStream.Write(fileContents, 0, fileContents.Length);
                 }
+
+                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                {
+                   // Log("FTP Response: " + response.StatusDescription.Trim());
+                   //Do nothing this is just to flush and close the connection
+                }
+
             }
             catch (WebException ex)
             {
@@ -432,6 +445,7 @@ namespace myRTSPStreamer
             Properties.Settings.Default.AutoSnapshot = chkbx_AutoSnapshot.Checked;
             Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
             Properties.Settings.Default.FTP = chkbx_ftp.Checked;
+            Properties.Settings.Default.SaveImage = chkbx_save_image.Checked;
 
             Properties.Settings.Default.Save();
         }

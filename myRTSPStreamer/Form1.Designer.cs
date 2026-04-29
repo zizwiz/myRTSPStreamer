@@ -84,6 +84,7 @@ namespace myRTSPStreamer
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.chkbx_ftp = new System.Windows.Forms.CheckBox();
+            this.chkbx_save_image = new System.Windows.Forms.CheckBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -96,6 +97,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.chkbx_save_image);
             this.panelTop.Controls.Add(this.chkbx_ftp);
             this.panelTop.Controls.Add(this.btn_save_settings);
             this.panelTop.Controls.Add(this.btn_sync_time);
@@ -448,6 +450,16 @@ namespace myRTSPStreamer
             this.chkbx_ftp.TabIndex = 27;
             this.chkbx_ftp.Text = "FTP Image";
             // 
+            // chkbx_save_image
+            // 
+            this.chkbx_save_image.Checked = true;
+            this.chkbx_save_image.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbx_save_image.Location = new System.Drawing.Point(620, 38);
+            this.chkbx_save_image.Name = "chkbx_save_image";
+            this.chkbx_save_image.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_save_image.TabIndex = 28;
+            this.chkbx_save_image.Text = "Save Image";
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
@@ -496,6 +508,7 @@ namespace myRTSPStreamer
         private Button btn_sync_time;
         private Button btn_save_settings;
         private CheckBox chkbx_ftp;
+        private CheckBox chkbx_save_image;
     }
 }
 
