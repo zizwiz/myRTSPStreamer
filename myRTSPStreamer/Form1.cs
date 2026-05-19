@@ -1,7 +1,6 @@
 ﻿using LibVLCSharp.Shared;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -23,6 +22,7 @@ namespace myRTSPStreamer
         private bool heartbeat = true; //flag used to determine if we should write the heartbeat file or not
         private string ftpUser = ""; //used to read from text file username=ABC
         private string ftpPass = ""; //used to read from text file password=XyZ
+
 
         public Form1(bool myRestartMode)
         {
@@ -124,7 +124,7 @@ namespace myRTSPStreamer
                 lblStatus.Text = "Connecting...";
 
                 var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
-                _mediaPlayer.Play(media);
+               _mediaPlayer.Play(media);
                 
                 while (!_mediaPlayer.IsPlaying) //still connecting and starting
                 {
@@ -583,6 +583,11 @@ namespace myRTSPStreamer
             _libVLC = new LibVLC("--no-disable-screensaver"); //parameter will allow screen to sleep
             _mediaPlayer = new MediaPlayer(_libVLC);
             videoView1.MediaPlayer = _mediaPlayer;
+           
+            
+            //These two lines required to get aspect ratio correct
+            _mediaPlayer.AspectRatio = "16:9"; //aspect ratio of sensor
+            _mediaPlayer.Scale = 0;   // auto-scale while preserving aspect ratio
 
             _mediaPlayer.EncounteredError += MediaPlayer_EncounteredError;
             _mediaPlayer.Stopped += MediaPlayer_Stopped;
