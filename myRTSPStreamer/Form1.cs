@@ -1,6 +1,7 @@
 ﻿using LibVLCSharp.Shared;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -250,11 +251,50 @@ namespace myRTSPStreamer
 
                 string filename = $"{timestamp}_{snapNum}.jpg";
 
-                if (!chkbx_save_image.Checked) filename = $"west.jpg"; //We are not storing images locally
+                if (!chkbx_save_image.Checked) //filename = $"west.jpg"; //We are not storing images locally
+                {
+                    if (!chkbx_north.Checked)
+                    {
+                        filename = $"west.jpg";
+                    }
+                    else
+                    {
+                        filename = $"north.jpg";
+                    }
+                }
 
                 string fullPath = Path.Combine(folderPath, filename);
 
-                _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0);
+                _mediaPlayer.TakeSnapshot(0, fullPath, 0, 0); //Removed next we save always as 16:9
+
+                //// 1. Save raw snapshot to temp file
+                //string tempFile = Path.Combine(Path.GetTempPath(), "raw_snapshot.jpg");
+                //_mediaPlayer.TakeSnapshot(0, tempFile, 0, 0);
+
+                //// 2. Load raw image
+                //using (Bitmap raw = new Bitmap(tempFile))
+                //{
+                //    // 3. Calculate correct 16:9 size
+                //    int width = raw.Width;
+                //    int height = (int)(width / (16.0 / 9.0));
+
+                //    // If height is too tall, adjust based on height instead
+                //    if (height > raw.Height)
+                //    {
+                //        height = raw.Height;
+                //        width = (int)(height * (16.0 / 9.0));
+                //    }
+
+                //    // 4. Rescale to corrected aspect ratio
+                //    using (Bitmap corrected = RescaleToAspectRatio(raw, width, height))
+                //    {
+                //        corrected.Save(fullPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //    }
+                //}
+
+                //// 5. Delete temp file
+                //File.Delete(tempFile);
+
 
                 if (chkbx_save_image.Checked) // only increment if saving locally
                 {
@@ -286,9 +326,11 @@ namespace myRTSPStreamer
         private void UploadImage(string FullFilePath)
         {
             string localFile = FullFilePath; //Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "west.jpg");
-            string ftpUrl = "ftp://ftpupload.net/htdocs/twotwofly/images/west.jpg";
+           // string ftpUrl = "ftp://ftpupload.net/htdocs/twotwofly/images/west.jpg";
 
-           
+             string ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/west.jpg";
+
+           if (chkbx_north.Checked) ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/north.jpg";
 
             try
             {
@@ -586,8 +628,8 @@ namespace myRTSPStreamer
            
             
             //These two lines required to get aspect ratio correct
-            _mediaPlayer.AspectRatio = "16:9"; //aspect ratio of sensor
-            _mediaPlayer.Scale = 0;   // auto-scale while preserving aspect ratio
+            //_mediaPlayer.AspectRatio = "16:9"; //aspect ratio of sensor
+            //_mediaPlayer.Scale = 0;   // auto-scale while preserving aspect ratio
 
             _mediaPlayer.EncounteredError += MediaPlayer_EncounteredError;
             _mediaPlayer.Stopped += MediaPlayer_Stopped;
@@ -629,5 +671,20 @@ namespace myRTSPStreamer
                 TryRestartStream();
             });
         }
+
+        ////Added to rescale the snapshots to all be 16:9
+        //private Bitmap RescaleToAspectRatio(Bitmap source, int targetWidth, int targetHeight)
+        //{
+        //    Bitmap result = new Bitmap(targetWidth, targetHeight);
+
+        //    using (Graphics g = Graphics.FromImage(result))
+        //    {
+        //        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //        g.DrawImage(source, 0, 0, targetWidth, targetHeight);
+        //    }
+
+        //    return result;
+        //}
+
     }
 }

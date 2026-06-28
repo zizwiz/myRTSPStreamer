@@ -85,6 +85,7 @@ namespace myRTSPStreamer
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.chkbx_north = new System.Windows.Forms.CheckBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -97,6 +98,7 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.chkbx_north);
             this.panelTop.Controls.Add(this.chkbx_save_image);
             this.panelTop.Controls.Add(this.chkbx_ftp);
             this.panelTop.Controls.Add(this.btn_save_settings);
@@ -460,6 +462,16 @@ namespace myRTSPStreamer
             this.panel3.Size = new System.Drawing.Size(1244, 114);
             this.panel3.TabIndex = 2;
             // 
+            // chkbx_north
+            // 
+            this.chkbx_north.Checked = true;
+            this.chkbx_north.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbx_north.Location = new System.Drawing.Point(740, 38);
+            this.chkbx_north.Name = "chkbx_north";
+            this.chkbx_north.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_north.TabIndex = 29;
+            this.chkbx_north.Text = "North Camera";
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1250, 612);
@@ -509,6 +521,7 @@ namespace myRTSPStreamer
         private Button btn_save_settings;
         private CheckBox chkbx_ftp;
         private CheckBox chkbx_save_image;
+        private CheckBox chkbx_north;
     }
 }
 
