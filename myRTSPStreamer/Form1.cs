@@ -334,33 +334,41 @@ namespace myRTSPStreamer
 
             try
             {
-                if (!File.Exists(localFile))
-                {
-                    Log("Local file not found: " + localFile);
-                    return;
-                }
+                //if (!File.Exists(localFile))
+                //{
+                //    Log("Local file not found: " + localFile);
+                //    return;
+                //}
 
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.Credentials = new NetworkCredential(ftpUser, ftpPass);
-                request.EnableSsl = false;
-                request.UseBinary = true;
-                request.UsePassive = true;
-                request.KeepAlive = false;
+                //FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
 
-                byte[] fileContents = File.ReadAllBytes(localFile);
-                request.ContentLength = fileContents.Length;
+                //request.Method = WebRequestMethods.Ftp.UploadFile;
 
-                using (Stream requestStream = request.GetRequestStream())
-                {
-                    requestStream.Write(fileContents, 0, fileContents.Length);
-                }
+                //request.Credentials = new NetworkCredential(ftpUser, ftpPass);
+                //request.EnableSsl = false;
+                //request.UseBinary = true;
+                //request.UsePassive = true;
+                //request.KeepAlive = false;
 
-                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-                {
-                   // Log("FTP Response: " + response.StatusDescription.Trim());
-                   //Do nothing this is just to flush and close the connection
-                }
+                //byte[] fileContents = File.ReadAllBytes(localFile);
+                //request.ContentLength = fileContents.Length;
+
+                //using (Stream requestStream = request.GetRequestStream())
+                //{
+                //    requestStream.Write(fileContents, 0, fileContents.Length);
+                //}
+
+                //using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                //{
+                //   // Log("FTP Response: " + response.StatusDescription.Trim());
+                //   //Do nothing this is just to flush and close the connection
+                //}
+
+                // Step 1: Delete the existing file
+                DeleteFileFromFtp(ftpUrl, ftpUser, ftpPass);
+
+                // Step 2: Upload the new file
+                UploadFileToFtp(ftpUrl, ftpUser, ftpPass, localFile);
 
             }
             catch (WebException ex)
@@ -379,6 +387,57 @@ namespace myRTSPStreamer
                Log("General error: " + ex.Message);
             }
         }
+
+
+        private void DeleteFileFromFtp(string ftpFilePath, string username, string password)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpFilePath);
+            request.Method = WebRequestMethods.Ftp.DeleteFile;
+            request.Credentials = new NetworkCredential(username, password);
+            request.EnableSsl = false;
+            request.UseBinary = true;
+            request.UsePassive = true;
+            request.KeepAlive = false;
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                // Log("FTP Response: " + response.StatusDescription.Trim());
+                //Do nothing this is just to flush and close the connection
+            }
+        }
+
+        private void UploadFileToFtp(string ftpFilePath, string username, string password, string localFilePath)
+        {
+            if (!File.Exists(localFilePath))
+            {
+                Log("Local file not found: " + localFilePath);
+                return;
+            }
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpFilePath);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.Credentials = new NetworkCredential(username, password);
+            request.EnableSsl = false;
+            request.UseBinary = true;
+            request.UsePassive = true;
+            request.KeepAlive = false;
+
+            byte[] fileContents = File.ReadAllBytes(localFilePath);
+            request.ContentLength = fileContents.Length;
+
+            using (Stream requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(fileContents, 0, fileContents.Length);
+            }
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                // Log("FTP Response: " + response.StatusDescription.Trim());
+                //Do nothing this is just to flush and close the connection
+            }
+        }
+
+
 
         private void Log(string message)
         {
