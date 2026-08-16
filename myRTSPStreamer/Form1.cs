@@ -55,7 +55,7 @@ namespace myRTSPStreamer
                 chkbx_AutoSnapshot.Checked = false; //make sure unchecked
                 Start(); //Auto start app
                 Log("Auto restart as App was locked: " + DateTime.Now.ToString("HHmmss"));
-                
+
                 // overwrite with last saved number
                 txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
             }
@@ -89,7 +89,7 @@ namespace myRTSPStreamer
             }
             catch (Exception ex)
             {
-               Log("Config load error: " + ex.Message);
+                Log("Config load error: " + ex.Message);
             }
         }
 
@@ -118,15 +118,15 @@ namespace myRTSPStreamer
         {
             try
             {
-               chkbx_AutoSnapshot.Checked = true; //change to checked to autorun
+                chkbx_AutoSnapshot.Checked = true; //change to checked to autorun
 
                 string rtspUrl = BuildRtspUrl();
                 Log("Starting stream: " + rtspUrl);
                 lblStatus.Text = "Connecting...";
 
                 var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
-               _mediaPlayer.Play(media);
-                
+                _mediaPlayer.Play(media);
+
                 while (!_mediaPlayer.IsPlaying) //still connecting and starting
                 {
                     await Task.Delay(10000); //delay 1 second incase we have slow network connection
@@ -153,7 +153,7 @@ namespace myRTSPStreamer
             {
                 _mediaPlayer.Stop();
                 timerAutoSnapshot.Stop();
-               // timerStreamMonitor.Stop();
+                // timerStreamMonitor.Stop();
                 lblStatus.Text = "Stopped";
             }
             catch (Exception ex)
@@ -195,7 +195,7 @@ namespace myRTSPStreamer
             if (chkbx_AutoSnapshot.Checked)
             {
                 int seconds = (int)numupdn_Interval.Value;
-                timerAutoSnapshot.Interval = seconds * 1000; 
+                timerAutoSnapshot.Interval = seconds * 1000;
                 timerAutoSnapshot.Start();
             }
             else
@@ -325,45 +325,14 @@ namespace myRTSPStreamer
 
         private void UploadImage(string FullFilePath)
         {
-            string localFile = FullFilePath; //Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "west.jpg");
-           // string ftpUrl = "ftp://ftpupload.net/htdocs/twotwofly/images/west.jpg";
+            string localFile = FullFilePath;
 
-             string ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/west.jpg";
+            string ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/west.jpg";
 
-           if (chkbx_north.Checked) ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/north.jpg";
+            if (chkbx_north.Checked) ftpUrl = "ftp://185.27.134.11/htdocs/twotwofly/images/north.jpg";
 
             try
             {
-                //if (!File.Exists(localFile))
-                //{
-                //    Log("Local file not found: " + localFile);
-                //    return;
-                //}
-
-                //FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-
-                //request.Method = WebRequestMethods.Ftp.UploadFile;
-
-                //request.Credentials = new NetworkCredential(ftpUser, ftpPass);
-                //request.EnableSsl = false;
-                //request.UseBinary = true;
-                //request.UsePassive = true;
-                //request.KeepAlive = false;
-
-                //byte[] fileContents = File.ReadAllBytes(localFile);
-                //request.ContentLength = fileContents.Length;
-
-                //using (Stream requestStream = request.GetRequestStream())
-                //{
-                //    requestStream.Write(fileContents, 0, fileContents.Length);
-                //}
-
-                //using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-                //{
-                //   // Log("FTP Response: " + response.StatusDescription.Trim());
-                //   //Do nothing this is just to flush and close the connection
-                //}
-
                 // Step 1: Delete the existing file
                 DeleteFileFromFtp(ftpUrl, ftpUser, ftpPass);
 
@@ -384,10 +353,9 @@ namespace myRTSPStreamer
             }
             catch (Exception ex)
             {
-               Log("General error: " + ex.Message);
+                Log("General error: " + ex.Message);
             }
         }
-
 
         private void DeleteFileFromFtp(string ftpFilePath, string username, string password)
         {
@@ -436,8 +404,6 @@ namespace myRTSPStreamer
                 //Do nothing this is just to flush and close the connection
             }
         }
-
-
 
         private void Log(string message)
         {
@@ -671,7 +637,7 @@ namespace myRTSPStreamer
                     Directory.CreateDirectory(Path.GetDirectoryName(myHeartBeatPath));
                     File.WriteAllText(myHeartBeatPath, DateTime.Now.ToString("O"));
                 }
-                
+
             }
             catch
             {
@@ -684,8 +650,8 @@ namespace myRTSPStreamer
             _libVLC = new LibVLC("--no-disable-screensaver"); //parameter will allow screen to sleep
             _mediaPlayer = new MediaPlayer(_libVLC);
             videoView1.MediaPlayer = _mediaPlayer;
-           
-            
+
+
             //These two lines required to get aspect ratio correct
             //_mediaPlayer.AspectRatio = "16:9"; //aspect ratio of sensor
             //_mediaPlayer.Scale = 0;   // auto-scale while preserving aspect ratio
