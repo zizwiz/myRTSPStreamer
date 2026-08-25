@@ -106,6 +106,7 @@ namespace myRTSPStreamer
             txtbx_Next_Image_Number.Text = Properties.Settings.Default.Next_Image_Number;
             chkbx_ftp.Checked = Properties.Settings.Default.FTP;
             chkbx_save_image.Checked = Properties.Settings.Default.SaveImage;
+            chkbx_north.Checked = Properties.Settings.Default.chkBxNorth;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -513,6 +514,7 @@ namespace myRTSPStreamer
             Properties.Settings.Default.Next_Image_Number = txtbx_Next_Image_Number.Text;
             Properties.Settings.Default.FTP = chkbx_ftp.Checked;
             Properties.Settings.Default.SaveImage = chkbx_save_image.Checked;
+            Properties.Settings.Default.chkBxNorth = chkbx_north.Checked;
 
             Properties.Settings.Default.Save();
         }

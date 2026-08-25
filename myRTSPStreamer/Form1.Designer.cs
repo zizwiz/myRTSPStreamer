@@ -50,6 +50,7 @@ namespace myRTSPStreamer
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelTop = new System.Windows.Forms.Panel();
+            this.chkbx_north = new System.Windows.Forms.CheckBox();
             this.chkbx_save_image = new System.Windows.Forms.CheckBox();
             this.chkbx_ftp = new System.Windows.Forms.CheckBox();
             this.btn_save_settings = new System.Windows.Forms.Button();
@@ -85,7 +86,6 @@ namespace myRTSPStreamer
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.chkbx_north = new System.Windows.Forms.CheckBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numupdn_Interval)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -130,6 +130,16 @@ namespace myRTSPStreamer
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1244, 94);
             this.panelTop.TabIndex = 1;
+            // 
+            // chkbx_north
+            // 
+            this.chkbx_north.Checked = true;
+            this.chkbx_north.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkbx_north.Location = new System.Drawing.Point(740, 38);
+            this.chkbx_north.Name = "chkbx_north";
+            this.chkbx_north.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_north.TabIndex = 29;
+            this.chkbx_north.Text = "North Camera";
             // 
             // chkbx_save_image
             // 
@@ -461,16 +471,6 @@ namespace myRTSPStreamer
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1244, 114);
             this.panel3.TabIndex = 2;
-            // 
-            // chkbx_north
-            // 
-            this.chkbx_north.Checked = true;
-            this.chkbx_north.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkbx_north.Location = new System.Drawing.Point(740, 38);
-            this.chkbx_north.Name = "chkbx_north";
-            this.chkbx_north.Size = new System.Drawing.Size(189, 26);
-            this.chkbx_north.TabIndex = 29;
-            this.chkbx_north.Text = "North Camera";
             // 
             // Form1
             // 

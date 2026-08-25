@@ -166,5 +166,17 @@ namespace myRTSPStreamer.Properties {
                 this["SaveImage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool chkBxNorth {
+            get {
+                return ((bool)(this["chkBxNorth"]));
+            }
+            set {
+                this["chkBxNorth"] = value;
+            }
+        }
     }
 }
