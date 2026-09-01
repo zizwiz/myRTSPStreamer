@@ -98,8 +98,6 @@ namespace myRTSPStreamer
             // 
             // panelTop
             // 
-            this.panelTop.Controls.Add(this.chkbx_north);
-            this.panelTop.Controls.Add(this.chkbx_save_image);
             this.panelTop.Controls.Add(this.chkbx_ftp);
             this.panelTop.Controls.Add(this.btn_save_settings);
             this.panelTop.Controls.Add(this.btn_sync_time);
@@ -125,6 +123,8 @@ namespace myRTSPStreamer
             this.panelTop.Controls.Add(this.txtIpAddress);
             this.panelTop.Controls.Add(this.txtPort);
             this.panelTop.Controls.Add(this.txtStreamPath);
+            this.panelTop.Controls.Add(this.chkbx_save_image);
+            this.panelTop.Controls.Add(this.chkbx_north);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -137,7 +137,7 @@ namespace myRTSPStreamer
             this.chkbx_north.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkbx_north.Location = new System.Drawing.Point(740, 38);
             this.chkbx_north.Name = "chkbx_north";
-            this.chkbx_north.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_north.Size = new System.Drawing.Size(145, 27);
             this.chkbx_north.TabIndex = 29;
             this.chkbx_north.Text = "North Camera";
             // 
@@ -145,9 +145,9 @@ namespace myRTSPStreamer
             // 
             this.chkbx_save_image.Checked = true;
             this.chkbx_save_image.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkbx_save_image.Location = new System.Drawing.Point(620, 38);
+            this.chkbx_save_image.Location = new System.Drawing.Point(626, 38);
             this.chkbx_save_image.Name = "chkbx_save_image";
-            this.chkbx_save_image.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_save_image.Size = new System.Drawing.Size(100, 26);
             this.chkbx_save_image.TabIndex = 28;
             this.chkbx_save_image.Text = "Save Image";
             // 
@@ -157,7 +157,7 @@ namespace myRTSPStreamer
             this.chkbx_ftp.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkbx_ftp.Location = new System.Drawing.Point(501, 38);
             this.chkbx_ftp.Name = "chkbx_ftp";
-            this.chkbx_ftp.Size = new System.Drawing.Size(189, 26);
+            this.chkbx_ftp.Size = new System.Drawing.Size(113, 26);
             this.chkbx_ftp.TabIndex = 27;
             this.chkbx_ftp.Text = "FTP Image";
             // 

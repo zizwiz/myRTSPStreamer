@@ -334,6 +334,7 @@ namespace myRTSPStreamer
 
             try
             {
+
                 // Step 1: Delete the existing file
                 DeleteFileFromFtp(ftpUrl, ftpUser, ftpPass);
 
@@ -343,6 +344,11 @@ namespace myRTSPStreamer
             }
             catch (WebException ex)
             {
+
+                // We come in here if the DeleteFileFromFTP cannot find a file to delete
+                // We now assume the file has been deleted and are safe to upload
+                UploadFileToFtp(ftpUrl, ftpUser, ftpPass, localFile);
+
                 string ftpResponse = "";
 
                 if (ex.Response is FtpWebResponse ftpEx)
@@ -350,7 +356,7 @@ namespace myRTSPStreamer
                     ftpResponse = ftpEx.StatusDescription;
                 }
 
-                Log("FTP error: " + ex.Message + " | Server: " + ftpResponse);
+                Log("File Uploaded but ..... \nFTP error: " + ex.Message + " | Server: " + ftpResponse);
             }
             catch (Exception ex)
             {
